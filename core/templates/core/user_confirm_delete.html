@@ -6,14 +6,18 @@
 <div class="main-header">
     <h1>Confirmar Exclusão de Usuário</h1>
 </div>
-<div class="card">
-    <div class="card-body">
-        <p>Você tem certeza que deseja excluir o usuário <strong>{{ object.username }}</strong>?</p>
+<div class="card text-center shadow-sm">
+    <div class="card-body p-5">
+        <div class="display-4 text-danger mb-4">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+        </div>
+        <h3 class="card-title">Atenção!</h3>
+        <p class="lead">Você tem certeza que deseja excluir permanentemente o usuário <strong>{{ object.username }}</strong>?</p>
         <p class="text-danger">Esta ação não pode ser desfeita.</p>
-        <form method="post">
+        <form method="post" class="mt-4">
             {% csrf_token %}
-            <a href="{% url 'core:user_management' %}" class="btn btn-light">Cancelar</a>
-            <button type="submit" class="btn btn-danger">Confirmar Exclusão</button>
+            <a href="{{ request.META.HTTP_REFERER|default:'core:user_management' }}" class="btn btn-light me-2">Cancelar</a>
+            <button type="submit" class="btn btn-danger">Sim, Excluir Usuário</button>
         </form>
     </div>
 </div>

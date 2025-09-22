@@ -12,6 +12,12 @@
 </div>
 
 <div class="card">
+    <div class="card-header rounded-5 bg-white border-0 pt-4 pb-0">
+        <div class="input-group mb-3">
+            <span class="input-group-text bg-light border-0"><i class="fa-solid fa-search"></i></span>
+            <input type="text" class="form-control bg-light border-0" placeholder="Buscar usuário...">
+        </div>
+    </div>
     <div class="card-body">
         <div class="table-responsive">
             <table class="table table-hover align-middle">
@@ -30,7 +36,10 @@
                         <td>
                             <div class="d-flex align-items-center">
                                 <img src="{{ u.profile_picture.url }}" alt="Foto de {{ u.username }}" class="rounded-circle avatar-sm me-3">
-                                <span>{{ u.username }}</span>
+                                <div>
+                                    <h6 class="mb-0">{{ u.get_full_name|default:u.username }}</h6>
+                                    <small class="text-muted">@{{ u.username }}</small>
+                                </div>
                             </div>
                         </td>
                         <td>{{ u.email }}</td>
