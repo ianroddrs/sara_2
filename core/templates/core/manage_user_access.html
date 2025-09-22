@@ -1,6 +1,3 @@
-<!-- =================================================================== -->
-<!--              templates/core/manage_user_access.html               -->
-<!-- =================================================================== -->
 {% extends "core/base.html" %}
 
 {% block title %}Gerenciar Acesso de {{ target_user.username }}{% endblock %}
@@ -16,14 +13,17 @@
         <form method="post">
             {% csrf_token %}
             <fieldset class="mb-3">
-                <legend class="fs-6 mb-3">{{ form.applications.label_tag }}</legend>
+                <legend class="fs-6 mb-3">{{ form.applications.label }}</legend>
                 {% for checkbox in form.applications %}
                     <div class="form-check">
                         {{ checkbox.tag }}
-                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">{{ checkbox.choice_label }}</label>
+                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">
+                            {{ checkbox.choice_label }}
+                        </label>
                     </div>
                 {% endfor %}
             </fieldset>
+            <hr>
             <a href="{% url 'core:user_management' %}" class="btn btn-light">Cancelar</a>
             <button type="submit" class="btn btn-dark">Salvar Alterações</button>
         </form>
