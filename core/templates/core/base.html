@@ -1,6 +1,3 @@
-<!-- =================================================================== -->
-<!--               templates/core/base.html (Novo Template Base)         -->
-<!-- =================================================================== -->
 {% load static %}
 {% load auth_extras %}
 <!DOCTYPE html>
@@ -32,7 +29,6 @@
 
         <nav class="sidebar-nav">
             <ul class="nav flex-column">
-                <!-- Links para os módulos podem ser adicionados dinamicamente aqui -->
                 <li class="nav-item">
                     <a class="nav-link" href="#"><i class="fa-solid fa-chart-line"></i> Dashboards</a>
                 </li>
@@ -80,15 +76,9 @@
             {% endblock %}
         </main>
         
-        <!-- O painel da direita pode ser implementado aqui se necessário -->
-        <!-- 
-        <aside class="info-panel" style="width: 350px; background: #fff; padding: 1.5rem; border-left: 1px solid var(--border-color); flex-shrink: 0;">
-            <h4>Painel de Informações</h4>
-            <p>Conteúdo adicional.</p>
-        </aside>
-        -->
-    </div>
+        </div>
 
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+    {% block extra_js %}{% endblock %}
 </body>
 </html>
