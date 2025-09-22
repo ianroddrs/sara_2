@@ -11,6 +11,14 @@ class CustomUserCreationForm(UserCreationForm):
     class Meta(UserCreationForm.Meta):
         model = CustomUser
         fields = ('username', 'email', 'first_name', 'last_name', 'profile_picture', 'allowed_ip_address')
+        labels = {
+            'username': 'Nome de Usuário',
+            'email': 'E-mail',
+            'first_name': 'Nome',
+            'last_name': 'Sobrenome',
+            'profile_picture': 'Foto de Perfil',
+            'allowed_ip_address': 'IP de Acesso Permitido',
+        }
 
     group = forms.ModelChoiceField(queryset=Group.objects.all(), required=True, label="Grupo")
 
@@ -26,6 +34,7 @@ class CustomUserCreationForm(UserCreationForm):
 
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+            field.help_text = None # Remove o texto de ajuda padrão do Django
 
     def save(self, commit=True):
         user = super().save(commit=False)
@@ -45,6 +54,15 @@ class AdminUserUpdateForm(forms.ModelForm):
     class Meta:
         model = CustomUser
         fields = ('username', 'email', 'first_name', 'last_name', 'profile_picture', 'allowed_ip_address', 'is_active')
+        labels = {
+            'username': 'Nome de Usuário',
+            'email': 'E-mail',
+            'first_name': 'Nome',
+            'last_name': 'Sobrenome',
+            'profile_picture': 'Foto de Perfil',
+            'allowed_ip_address': 'IP de Acesso Permitido',
+            'is_active': 'Ativo',
+        }
 
     def __init__(self, *args, **kwargs):
         self.requesting_user = kwargs.pop('requesting_user', None)
@@ -82,18 +100,27 @@ class CustomUserChangeForm(UserChangeForm):
     class Meta:
         model = CustomUser
         fields = ('first_name', 'last_name', 'email', 'profile_picture')
+        labels = {
+            'email': 'E-mail',
+            'first_name': 'Nome',
+            'last_name': 'Sobrenome',
+            'profile_picture': 'Foto de Perfil',
+        }
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
-
 
 class CustomPasswordChangeForm(PasswordChangeForm):
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['old_password'].label = "Senha antiga"
+        self.fields['new_password1'].label = "Nova senha"
+        self.fields['new_password2'].label = "Confirmação da nova senha"
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
+            field.help_text = None
 
 class AdminPasswordChangeForm(SetPasswordForm):
     """
@@ -102,9 +129,10 @@ class AdminPasswordChangeForm(SetPasswordForm):
     """
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
+        self.fields['new_password1'].label = "Nova senha"
+        self.fields['new_password2'].label = "Confirmação da nova senha"
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
-
 
 class UserAccessForm(forms.Form):
     """
