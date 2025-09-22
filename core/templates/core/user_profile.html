@@ -16,7 +16,14 @@
                      class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--border-color);">
                 <h4 class="my-3 fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
                 <p class="text-muted mb-1">@{{ profile_user.username }}</p>
-                <p class="text-muted mb-4"><span class="badge bg-primary fw-normal fs-6">{% get_group profile_user %}</span></p>
+                
+                {% if profile_user.is_online %}
+                    <p class="mb-2"><span class="text-success fw-bold">Online</span></p>
+                {% else %}
+                    <p class="mb-2"><span class="text-muted">Visto {{ profile_user.last_activity|humanize_last_activity }}</span></p>
+                {% endif %}
+
+                <p class="mb-4"><span class="badge bg-primary fw-normal fs-6">{% get_group profile_user %}</span></p>
                 
                 <div class="d-grid gap-2">
                     {% if request.user == profile_user %}

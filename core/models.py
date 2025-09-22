@@ -1,6 +1,8 @@
 from django.contrib.auth.models import AbstractUser
 from django.db import models
 from django.utils.translation import gettext_lazy as _
+from django.utils import timezone
+from datetime import timedelta
 
 # Modelo para as Aplicações/Módulos do sistema
 class Application(models.Model):
@@ -42,18 +44,28 @@ class CustomUser(AbstractUser):
         null=True,
         help_text=_("Se vazio, o acesso é permitido de qualquer IP.")
     )
-    # Relação Many-to-Many com as aplicações
     applications = models.ManyToManyField(
         Application,
         through='UserApplicationAccess',
         related_name='users',
         verbose_name=_("Aplicações")
     )
+    last_activity = models.DateTimeField(
+        _("Última Atividade"),
+        null=True,
+        blank=True
+    )
 
     class Meta:
         verbose_name = _("Usuário")
         verbose_name_plural = _("Usuários")
         ordering = ['username']
+
+    def is_online(self):
+        """Verifica se a última atividade do usuário foi nos últimos 5 minutos."""
+        if not self.last_activity:
+            return False
+        return timezone.now() < self.last_activity + timedelta(minutes=5)
 
 # Modelo Intermediário para controle de acesso
 class UserApplicationAccess(models.Model):
@@ -79,7 +91,6 @@ class UserApplicationAccess(models.Model):
     class Meta:
         verbose_name = _("Acesso de Usuário à Aplicação")
         verbose_name_plural = _("Acessos de Usuários às Aplicações")
-        # Garante que cada usuário só tenha um registro de acesso por aplicação
         unique_together = ('user', 'application')
 
     def __str__(self):
