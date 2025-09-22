@@ -7,39 +7,86 @@
 <div class="main-header">
     <h1>Perfil de Usuário</h1>
 </div>
-<div class="card">
-    <div class="card-body p-4">
-        <div class="row align-items-center">
-            <div class="col-md-3 text-center">
-                <img src="{{ profile_user.profile_picture.url }}" alt="Foto de {{ profile_user.username }}" class="img-fluid rounded-circle avatar-lg mb-3">
-            </div>
-            <div class="col-md-9">
-                <h3>{{ profile_user.get_full_name|default:profile_user.username }}</h3>
-                <p class="text-muted">@{{ profile_user.username }}</p>
-                <table class="table table-borderless">
-                    <tr>
-                        <th style="width: 150px;">Grupo:</th>
-                        <td><span class="badge bg-primary fw-normal">{% get_group profile_user %}</span></td>
-                    </tr>
-                    <tr>
-                        <th>Email:</th>
-                        <td>{{ profile_user.email }}</td>
-                    </tr>
-                    <tr>
-                        <th>Membro desde:</th>
-                        <td>{{ profile_user.date_joined|date:"d/m/Y" }}</td>
-                    </tr>
-                </table>
 
-                {% if request.user == profile_user %}
-                <a href="{% url 'core:self_profile_update' %}" class="btn btn-dark">Editar Meu Perfil</a>
-                <a href="{% url 'core:password_change' %}" class="btn btn-outline-dark ms-2">Alterar Senha</a>
-                {% elif profile_user|is_manageable_by:request.user %}
-                <a href="{% url 'core:user_edit' profile_user.pk %}" class="btn btn-secondary">Editar Usuário</a>
-                <a href="{% url 'core:manage_user_access' profile_user.pk %}" class="btn btn-info text-white">Gerenciar Acessos</a>
-                <a href="{% url 'core:admin_password_change' profile_user.pk %}" class="btn btn-secondary ms-2">Alterar Senha</a>
-                <a href="{% url 'core:user_delete' profile_user.pk %}" class="btn btn-danger text-white ms-2">Excluir Usuário</a>
-                {% endif %}
+<div class="row">
+    <div class="col-lg-4">
+        <div class="card mb-4">
+            <div class="card-body text-center">
+                <img src="{{ profile_user.profile_picture.url }}" alt="Foto de {{ profile_user.username }}"
+                     class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--border-color);">
+                <h4 class="my-3">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
+                <p class="text-muted mb-1">@{{ profile_user.username }}</p>
+                <p class="text-muted mb-4"><span class="badge bg-primary fw-normal fs-6">{% get_group profile_user %}</span></p>
+                
+                <div class="d-grid gap-2">
+                    {% if request.user == profile_user %}
+                        <a href="{% url 'core:self_profile_update' %}" class="btn btn-dark"><i class="fa-solid fa-pencil me-2"></i>Editar Meu Perfil</a>
+                        <a href="{% url 'core:password_change' %}" class="btn btn-outline-dark"><i class="fa-solid fa-lock me-2"></i>Alterar Senha</a>
+                    {% elif profile_user|is_manageable_by:request.user %}
+                        <a href="{% url 'core:user_edit' profile_user.pk %}" class="btn btn-dark"><i class="fa-solid fa-user-pen me-2"></i>Editar Usuário</a>
+                        <a href="{% url 'core:manage_user_access' profile_user.pk %}" class="btn btn-secondary"><i class="fa-solid fa-key me-2"></i>Gerenciar Acessos</a>
+                        <a href="{% url 'core:admin_password_change' profile_user.pk %}" class="btn btn-outline-secondary"><i class="fa-solid fa-lock me-2"></i>Alterar Senha</a>
+                        <a href="{% url 'core:user_delete' profile_user.pk %}" class="btn btn-outline-danger mt-3"><i class="fa-solid fa-trash-alt me-2"></i>Excluir Usuário</a>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="col-lg-8">
+        <div class="card mb-4">
+            <div class="card-body">
+                <div class="row">
+                    <div class="col-sm-3"><p class="mb-0 fw-bold">Nome Completo</p></div>
+                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.get_full_name|default:"Não informado" }}</p></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3"><p class="mb-0 fw-bold">Email</p></div>
+                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.email|default:"Não informado" }}</p></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3"><p class="mb-0 fw-bold">Membro Desde</p></div>
+                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.date_joined|date:"d/m/Y" }}</p></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3"><p class="mb-0 fw-bold">Último Login</p></div>
+                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</p></div>
+                </div>
+                <hr>
+                <div class="row">
+                    <div class="col-sm-3"><p class="mb-0 fw-bold">IP Permitido</p></div>
+                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.allowed_ip_address|default:"Qualquer IP" }}</p></div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="card">
+            <div class="card-header">
+                <h5 class="card-title mb-0">Acessos às Aplicações</h5>
+            </div>
+            <div class="card-body">
+                {% with user_apps=profile_user.applications.all %}
+                    {% if user_apps %}
+                        <ul class="list-group list-group-flush">
+                            {% for app in user_apps %}
+                                <li class="list-group-item d-flex align-items-center">
+                                    <i class="fa-solid fa-check-circle text-success me-3"></i>
+                                    <div>
+                                        <h6 class="mb-0">{{ app.name }}</h6>
+                                        {% if app.description %}
+                                            <small class="text-muted">{{ app.description }}</small>
+                                        {% endif %}
+                                    </div>
+                                </li>
+                            {% endfor %}
+                        </ul>
+                    {% else %}
+                        <p class="text-muted text-center py-3">Este usuário não possui acesso a nenhuma aplicação.</p>
+                    {% endif %}
+                {% endwith %}
             </div>
         </div>
     </div>
