@@ -1,7 +1,7 @@
 from django.contrib.auth.views import LoginView as BaseLoginView, PasswordChangeView
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
-from django.views.generic import ListView, DetailView, UpdateView, CreateView
+from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
@@ -120,7 +120,7 @@ class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
         # Garante que o usuário só possa editar quem ele tem permissão
         obj = super().get_object(queryset)
         if not user_can_manage_other(self.request.user, obj):
-            raise PermissionDenied("Você não tem permissão para editar este usuário.")
+            raise PermissionDenied("Você не tem permissão para editar este usuário.")
         return obj
 
     def get_form_kwargs(self):
@@ -131,6 +131,26 @@ class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
     def form_valid(self, form):
         messages.success(self.request, "Usuário atualizado com sucesso!")
         return super().form_valid(form)
+
+class UserDeleteView(ManagerialRoleRequiredMixin, DeleteView):
+    """
+    View para excluir um usuário, com verificação de hierarquia.
+    """
+    model = CustomUser
+    template_name = 'core/user_confirm_delete.html'
+    success_url = reverse_lazy('core:user_management')
+
+    def get_object(self, queryset=None):
+        obj = super().get_object(queryset)
+        if not user_can_manage_other(self.request.user, obj):
+            raise PermissionDenied("Você não tem permissão para excluir este usuário.")
+        return obj
+
+    def post(self, request, *args, **kwargs):
+        username = self.get_object().username
+        messages.success(request, f"Usuário {username} excluído com sucesso!")
+        return super().post(request, *args, **kwargs)
+
 
 # --- Views Públicas e de Perfil ---
 

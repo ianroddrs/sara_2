@@ -37,7 +37,8 @@
                 {% elif profile_user|is_manageable_by:request.user %}
                 <a href="{% url 'core:user_edit' profile_user.pk %}" class="btn btn-secondary">Editar Usuário</a>
                 <a href="{% url 'core:manage_user_access' profile_user.pk %}" class="btn btn-info text-white">Gerenciar Acessos</a>
-                <a href="{% url 'core:admin_password_change' profile_user.pk %}" class="btn btn-danger text-white ms-2">Alterar Senha</a>
+                <a href="{% url 'core:admin_password_change' profile_user.pk %}" class="btn btn-secondary ms-2">Alterar Senha</a>
+                <a href="{% url 'core:user_delete' profile_user.pk %}" class="btn btn-danger text-white ms-2">Excluir Usuário</a>
                 {% endif %}
             </div>
         </div>

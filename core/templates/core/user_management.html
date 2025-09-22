@@ -40,7 +40,8 @@
                             {% if u|is_manageable_by:request.user %}
                                 <a href="{% url 'core:user_edit' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="fa-solid fa-pencil"></i></a>
                                 <a href="{% url 'core:manage_user_access' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Gerenciar Acessos"><i class="fa-solid fa-key"></i></a>
-                                <a href="{% url 'core:admin_password_change' u.pk %}" class="btn btn-sm btn-outline-danger" title="Alterar Senha"><i class="fa-solid fa-lock"></i></a>
+                                <a href="{% url 'core:admin_password_change' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Alterar Senha"><i class="fa-solid fa-lock"></i></a>
+                                <a href="{% url 'core:user_delete' u.pk %}" class="btn btn-sm btn-outline-danger" title="Excluir"><i class="fa-solid fa-trash-alt"></i></a>
                             {% else %}
                                 <span class="text-muted fst-italic">Sem permissão</span>
                             {% endif %}
