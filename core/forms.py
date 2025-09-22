@@ -1,5 +1,5 @@
 from django import forms
-from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm
+from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import Group
 from .models import CustomUser, Application, UserApplicationAccess
 
@@ -84,6 +84,17 @@ class CustomPasswordChangeForm(PasswordChangeForm):
         super().__init__(*args, **kwargs)
         for field in self.fields:
             self.fields[field].widget.attrs.update({'class': 'form-control'})
+
+class AdminPasswordChangeForm(SetPasswordForm):
+    """
+    Formulário para um administrador alterar a senha de outro usuário.
+    Não requer a senha antiga.
+    """
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+        for field in self.fields:
+            self.fields[field].widget.attrs.update({'class': 'form-control'})
+
 
 class UserAccessForm(forms.Form):
     """

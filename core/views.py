@@ -13,7 +13,8 @@ from .forms import (
     CustomUserChangeForm,
     AdminUserUpdateForm,
     CustomPasswordChangeForm,
-    UserAccessForm
+    UserAccessForm,
+    AdminPasswordChangeForm
 )
 from .utils import user_can_manage_other # Lógica de hierarquia
 
@@ -53,7 +54,7 @@ class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
         return self.request.user.groups.filter(name__in=['Administrador', 'Coordenador', 'Gerente']).exists()
 
     def handle_no_permission(self):
-        messages.error(self.request, "Você не tem permissão para acessar esta página.")
+        messages.error(self.request, "Você não tem permissão para acessar esta página.")
         return redirect('core:user_list')
 
 # --- Views de Gerenciamento de Usuários ---
@@ -238,3 +239,28 @@ def module_placeholder_view(request, module_name):
         return redirect('core:user_list')
 
     return render(request, 'core/module_placeholder.html', {'module_name': module_name})
+
+@login_required
+def user_password_change_view(request, pk):
+    """
+    Permite que um usuário com hierarquia superior altere a senha de um usuário inferior.
+    """
+    target_user = get_object_or_404(CustomUser, pk=pk)
+
+    if not user_can_manage_other(request.user, target_user):
+        messages.error(request, "Você não tem permissão para alterar a senha deste usuário.")
+        return redirect('core:user_management')
+
+    if request.method == 'POST':
+        form = AdminPasswordChangeForm(target_user, request.POST)
+        if form.is_valid():
+            form.save()
+            messages.success(request, f"A senha de {target_user.username} foi alterada com sucesso.")
+            return redirect('core:user_management')
+    else:
+        form = AdminPasswordChangeForm(target_user)
+
+    return render(request, 'core/admin_password_change_form.html', {
+        'form': form,
+        'target_user': target_user
+    })

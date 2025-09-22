@@ -11,7 +11,8 @@ from .views import (
     UserCreateView,
     UserUpdateView,
     manage_user_access_view,
-    module_placeholder_view
+    module_placeholder_view,
+    user_password_change_view
 )
 
 app_name = 'core'
@@ -26,6 +27,7 @@ urlpatterns = [
     path('management/users/create/', UserCreateView.as_view(), name='user_create'),
     path('management/users/edit/<int:pk>/', UserUpdateView.as_view(), name='user_edit'),
     path('management/users/access/<int:pk>/', manage_user_access_view, name='manage_user_access'),
+    path('management/users/password-change/<int:pk>/', user_password_change_view, name='admin_password_change'),
     
     # Perfil e Listas Públicas
     path('', UserListView.as_view(), name='user_list'), # Home page
