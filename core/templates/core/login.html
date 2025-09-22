@@ -1,0 +1,52 @@
+<!-- =================================================================== -->
+<!--                     templates/core/login.html                       -->
+<!-- =================================================================== -->
+{% extends "core/base.html" %}
+
+{% block title %}Login{% endblock %}
+
+{% block content %}
+<style>
+    /* Estilos específicos para a página de login */
+    body {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        height: 100vh;
+        background-color: var(--main-bg);
+    }
+    .main-wrapper {
+        width: 100%;
+    }
+    .login-container {
+        max-width: 400px;
+        margin: auto;
+    }
+</style>
+<div class="login-container">
+    <div class="card p-3">
+        <div class="card-body">
+            <h3 class="card-title text-center mb-4">Acessar Sistema</h3>
+            <form method="post">
+                {% csrf_token %}
+                <div class="mb-3">
+                    <label for="id_username" class="form-label">Usuário</label>
+                    <input type="text" name="username" class="form-control" id="id_username" required>
+                </div>
+                <div class="mb-3">
+                    <label for="id_password" class="form-label">Senha</label>
+                    <input type="password" name="password" class="form-control" id="id_password" required>
+                </div>
+                {% if form.errors %}
+                    <div class="alert alert-danger p-2">
+                        <p class="mb-0">Seu usuário e senha não conferem.</p>
+                    </div>
+                {% endif %}
+                <div class="d-grid">
+                    <button type="submit" class="btn btn-primary">Entrar</button>
+                </div>
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock %}

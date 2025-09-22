@@ -1,0 +1,5 @@
+sara/__pycache__/
+core/__pycache__/
+core/migrations/__pycache__/
+core/templatetags/__pycache__/
+db.sqlite3
