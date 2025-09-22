@@ -8,13 +8,13 @@
     <h1>Perfil de Usuário</h1>
 </div>
 
-<div class="row">
+<div class="row g-4">
     <div class="col-lg-4">
-        <div class="card mb-4">
-            <div class="card-body text-center">
+        <div class="card h-100">
+            <div class="card-body text-center p-4">
                 <img src="{{ profile_user.profile_picture.url }}" alt="Foto de {{ profile_user.username }}"
-                     class="rounded-circle img-fluid" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--border-color);">
-                <h4 class="my-3">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
+                     class="rounded-circle img-fluid mb-3" style="width: 150px; height: 150px; object-fit: cover; border: 4px solid var(--border-color);">
+                <h4 class="my-3 fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
                 <p class="text-muted mb-1">@{{ profile_user.username }}</p>
                 <p class="text-muted mb-4"><span class="badge bg-primary fw-normal fs-6">{% get_group profile_user %}</span></p>
                 
@@ -35,45 +35,41 @@
 
     <div class="col-lg-8">
         <div class="card mb-4">
-            <div class="card-body">
-                <div class="row">
-                    <div class="col-sm-3"><p class="mb-0 fw-bold">Nome Completo</p></div>
-                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.get_full_name|default:"Não informado" }}</p></div>
+            <div class="card-body p-4">
+                <div class="row align-items-center py-2 border-bottom">
+                    <div class="col-sm-4"><p class="mb-0 fw-bold">Nome Completo</p></div>
+                    <div class="col-sm-8"><p class="text-muted mb-0">{{ profile_user.get_full_name|default:"Não informado" }}</p></div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-3"><p class="mb-0 fw-bold">Email</p></div>
-                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.email|default:"Não informado" }}</p></div>
+                <div class="row align-items-center py-2 border-bottom">
+                    <div class="col-sm-4"><p class="mb-0 fw-bold">Email</p></div>
+                    <div class="col-sm-8"><p class="text-muted mb-0">{{ profile_user.email|default:"Não informado" }}</p></div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-3"><p class="mb-0 fw-bold">Membro Desde</p></div>
-                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.date_joined|date:"d/m/Y" }}</p></div>
+                <div class="row align-items-center py-2 border-bottom">
+                    <div class="col-sm-4"><p class="mb-0 fw-bold">Membro Desde</p></div>
+                    <div class="col-sm-8"><p class="text-muted mb-0">{{ profile_user.date_joined|date:"d/m/Y" }}</p></div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-3"><p class="mb-0 fw-bold">Último Login</p></div>
-                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</p></div>
+                <div class="row align-items-center py-2 border-bottom">
+                    <div class="col-sm-4"><p class="mb-0 fw-bold">Último Login</p></div>
+                    <div class="col-sm-8"><p class="text-muted mb-0">{{ profile_user.last_login|date:"d/m/Y H:i"|default:"Nunca" }}</p></div>
                 </div>
-                <hr>
-                <div class="row">
-                    <div class="col-sm-3"><p class="mb-0 fw-bold">IP Permitido</p></div>
-                    <div class="col-sm-9"><p class="text-muted mb-0">{{ profile_user.allowed_ip_address|default:"Qualquer IP" }}</p></div>
+                <div class="row align-items-center py-2">
+                    <div class="col-sm-4"><p class="mb-0 fw-bold">IP Permitido</p></div>
+                    <div class="col-sm-8"><p class="text-muted mb-0">{{ profile_user.allowed_ip_address|default:"Qualquer IP" }}</p></div>
                 </div>
             </div>
         </div>
         
         <div class="card">
-            <div class="card-header">
-                <h5 class="card-title mb-0">Acessos às Aplicações</h5>
+            <div class="card-header rounded-top-5 bg-white p-4">
+                <h5 class="card-title mb-0 fw-bold">Acessos às Aplicações</h5>
             </div>
-            <div class="card-body">
+            <div class="card-body p-2">
                 {% with user_apps=profile_user.applications.all %}
                     {% if user_apps %}
                         <ul class="list-group list-group-flush">
                             {% for app in user_apps %}
-                                <li class="list-group-item d-flex align-items-center">
-                                    <i class="fa-solid fa-check-circle text-success me-3"></i>
+                                <li class="list-group-item d-flex align-items-center border-0 p-3">
+                                    <i class="fa-solid fa-check-circle text-success me-3 fs-5"></i>
                                     <div>
                                         <h6 class="mb-0">{{ app.name }}</h6>
                                         {% if app.description %}
@@ -84,7 +80,7 @@
                             {% endfor %}
                         </ul>
                     {% else %}
-                        <p class="text-muted text-center py-3">Este usuário não possui acesso a nenhuma aplicação.</p>
+                        <p class="text-muted text-center p-4">Este usuário não possui acesso a nenhuma aplicação.</p>
                     {% endif %}
                 {% endwith %}
             </div>
