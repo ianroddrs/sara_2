@@ -8,5 +8,7 @@ def dashboard(request):
     de pesquisas e itens salvos do usuário.
     """
     # Lógica para buscar histórico e itens salvos será adicionada aqui
-    context = {}
+    context = {
+        'show_info_panel': True  # Adicione esta linha
+    }
     return render(request, 'phoenix/dashboard.html', context)

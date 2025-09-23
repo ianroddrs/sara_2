@@ -90,7 +90,7 @@
     {% endwith %}
     {% endif %}
 
-    <div class="main-wrapper">
+    <div class="main-wrapper {% if show_info_panel %}with-info-panel{% endif %}">
         <main class="main-content">
              {% if messages %}
                 {% for message in messages %}
@@ -105,10 +105,12 @@
             {% endblock %}
         </main>
 
-        <aside class="info-panel" style="width: 350px; background: #fff; padding: 1.5rem; border-left: 1px solid var(--border-color); flex-shrink: 0;">
+        {% if show_info_panel %}
+        <aside class="info-panel">
             <h4>Painel de Informações</h4>
             <p>Conteúdo adicional.</p>
         </aside>
+        {% endif %}
        
     </div>
 

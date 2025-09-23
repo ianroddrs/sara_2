@@ -130,6 +130,28 @@ body {
 .table-hover > tbody > tr:hover > * {
     background-color: #f8f9fa;
 }
+
+/* --- Estilos para o Painel de Informações --- */
+.info-panel {
+    width: 350px;
+    background: #fff;
+    padding: 1.5rem;
+    border-left: 1px solid var(--border-color);
+    flex-shrink: 0;
+    transition: margin-right 0.3s ease-in-out;
+}
+
+/* Oculta o painel por padrão */
+.info-panel {
+    margin-right: -350px; /* Move para fora da tela */
+}
+
+/* Exibe o painel quando a classe 'with-info-panel' está presente */
+.main-wrapper.with-info-panel .info-panel {
+    margin-right: 0;
+}
+
+
 .avatar-sm { width: 40px; height: 40px; object-fit: cover; }
 .avatar-md { width: 120px; height: 120px; object-fit: cover; }
 .avatar-lg { width: 220px; height: 220px; object-fit: cover; }
