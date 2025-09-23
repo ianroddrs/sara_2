@@ -68,28 +68,37 @@
         
         <div class="card">
             <div class="card-header rounded-top-5 bg-white p-4">
-                <h5 class="card-title mb-0 fw-bold">Acessos às Aplicações</h5>
+                <h5 class="card-title mb-0 fw-bold">Acessos aos Módulos</h5>
             </div>
             <div class="card-body p-2">
-                {% with user_apps=profile_user.applications.all %}
-                    {% if user_apps %}
-                        <ul class="list-group list-group-flush">
-                            {% for app in user_apps %}
-                                <li class="list-group-item d-flex align-items-center border-0 p-3">
-                                    <i class="fa-solid fa-check-circle text-success me-3 fs-5"></i>
-                                    <div>
-                                        <h6 class="mb-0">{{ app.name }}</h6>
-                                        {% if app.description %}
-                                            <small class="text-muted">{{ app.description }}</small>
-                                        {% endif %}
-                                    </div>
-                                </li>
-                            {% endfor %}
-                        </ul>
-                    {% else %}
-                        <p class="text-muted text-center p-4">Este usuário não possui acesso a nenhuma aplicação.</p>
-                    {% endif %}
-                {% endwith %}
+                {% if all_applications %}
+                    <ul class="list-group list-group-flush">
+                        {% for app in all_applications %}
+                            <li class="list-group-item p-3">
+                                <h6 class="mb-2 fw-bold">{{ app.name }}</h6>
+                                <ul class="list-unstyled mb-0 ps-3">
+                                    {% for module in app.modules.all %}
+                                        <li class="d-flex align-items-center mb-1">
+                                            {% if module.id in user_module_ids %}
+                                                <i class="fa-solid fa-check-circle text-success me-3 fs-6"></i>
+                                            {% else %}
+                                                <i class="fa-solid fa-times-circle text-danger me-3 fs-6"></i>
+                                            {% endif %}
+                                            <div>
+                                                <span>{{ module.name }}</span>
+                                                {% if module.description %}
+                                                    <br><small class="text-muted">{{ module.description }}</small>
+                                                {% endif %}
+                                            </div>
+                                        </li>
+                                    {% endfor %}
+                                </ul>
+                            </li>
+                        {% endfor %}
+                    </ul>
+                {% else %}
+                    <p class="text-muted text-center p-4">Nenhuma aplicação ou módulo cadastrado no sistema.</p>
+                {% endif %}
             </div>
         </div>
     </div>

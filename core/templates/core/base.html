@@ -32,7 +32,7 @@
                 <li class="nav-item">
                     <div class="btn-group dropend w-100">
                         <a href="{% url 'phoenix:dashboard' %}" class="btn btn-dark text-start">
-                            <i class="fa-solid fa-feather-pointed me-2"></i> Phoenix
+                            <i class="fa-solid fa-feather-pointed me-3"></i> Phoenix
                         </a>
                         <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split p-0" data-bs-toggle="dropdown" aria-expanded="false" style="width: 10px;">
                             <span class="visually-hidden">Toggle Dropdown</span>
@@ -94,7 +94,7 @@
         <main class="main-content">
              {% if messages %}
                 {% for message in messages %}
-                    <div class="alert alert-{{ message.tags }} alert-dismissible fade show" role="alert">
+                    <div class="alert alert-{% if message.tags == 'error' %}danger{% else %}{{ message.tags }}{% endif %} alert-dismissible fade show" role="alert">
                         {{ message }}
                         <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
                     </div>
