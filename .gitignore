@@ -3,3 +3,5 @@ core/__pycache__/
 core/migrations/__pycache__/
 core/templatetags/__pycache__/
 db.sqlite3
+phoenix/__pycache__/
+phoenix/migrations/__pycache__/

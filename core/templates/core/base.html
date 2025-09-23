@@ -29,21 +29,45 @@
 
         <nav class="sidebar-nav">
             <ul class="nav flex-column">
-               
-                {% with user.applications.all as apps %}
-                    {% if apps %}
-                        <li class="nav-item mt-3">
-                            <h6 class="nav-link text-muted" style="font-size: 0.8rem;">MÓDULOS</h6>
-                        </li>
-                        {% for app in apps %}
-                        <li class="nav-item">
-                            <a class="nav-link" href="{% url 'core:module_placeholder' app.name %}"><i class="fa-solid fa-chart-line"></i> {{ app.name }}</a>
-                        </li>
-                        {% endfor %}
-                    {% endif %}
-                {% endwith %}
-            </ul>
+                <li class="nav-item mt-3">
+                    <h6 class="nav-link text-muted" style="font-size: 0.8rem;">ANÁLISE</h6>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group w-100">
+                        <a href="{% url 'phoenix:dashboard' %}" class="btn btn-dark text-start flex-grow-1">
+                            <i class="fa-solid fa-feather-pointed"></i> Phoenix
+                        </a>
+                        <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                            <span class="visually-hidden">Toggle Dropdown</span>
+                        </button>
+                        <ul class="dropdown-menu dropdown-menu-dark">
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#bopSearchModal">Pesquisar BOP</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#procedureSearchModal">Pesquisar Procedimento</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportSearchModal">Pesquisar Relato</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#personSearchModal">Pesquisar Pessoa</a></li>
+                        </ul>
+                    </div>
+                </li>
+                
+                </ul>
         </nav>
+        <div class="modal fade" id="bopSearchModal" tabindex="-1">
+        <div class="modal-dialog">
+            <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Pesquisa por Boletim</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+            </div>
+            <div class="modal-body">
+                <form action="">{% csrf_token %}{{ bop_search_form.as_p }}</form>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Fechar</button>
+                <button type="button" class="btn btn-primary">Pesquisar</button>
+            </div>
+            </div>
+        </div>
+        </div>
 
         <div class="sidebar-footer">
             <ul class="nav flex-column">
