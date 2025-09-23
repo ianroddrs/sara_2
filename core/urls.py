@@ -11,7 +11,6 @@ from .views import (
     UserCreateView,
     UserUpdateView,
     manage_user_access_view,
-    module_placeholder_view,
     user_password_change_view,
     UserDeleteView
 )
@@ -37,6 +36,4 @@ urlpatterns = [
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
     path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),
     
-    # Placeholders dos Módulos
-    path('module/<str:module_name>/', module_placeholder_view, name='module_placeholder'),
 ]

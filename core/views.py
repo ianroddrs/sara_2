@@ -8,13 +8,13 @@ from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model, update_session_auth_hash
 from django.contrib.auth.models import Group
+from collections import defaultdict
 from .models import Application
 from .forms import (
     CustomUserCreationForm,
     CustomUserChangeForm,
     AdminUserUpdateForm,
     CustomPasswordChangeForm,
-    UserAccessForm,
     AdminPasswordChangeForm
 )
 from .utils import user_can_manage_other # Lógica de hierarquia
@@ -166,12 +166,28 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     """
-    Exibe o perfil de um usuário. Os botões de ação
-    são controlados no template com base na hierarquia.
+    Exibe o perfil de um usuário, incluindo uma lista completa
+    de permissões de módulos (concedidas e negadas).
     """
     model = CustomUser
     template_name = 'core/user_profile.html'
     context_object_name = 'profile_user'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        profile_user = self.get_object()
+
+        # Busca todas as aplicações com seus respectivos módulos para a lista completa
+        all_applications = Application.objects.prefetch_related('modules').order_by('name')
+
+        # Busca os IDs dos módulos que o usuário realmente possui
+        user_module_ids = set(profile_user.modules.values_list('id', flat=True))
+
+        # Adiciona ambas as informações ao contexto
+        context['all_applications'] = all_applications
+        context['user_module_ids'] = user_module_ids
+        
+        return context
 
 @login_required
 def self_profile_update_view(request):
@@ -235,33 +251,6 @@ def manage_user_access_view(request, pk):
         'user_module_ids': user_module_ids
     }
     return render(request, 'core/manage_user_access.html', context)
-
-
-# --- Placeholders para Módulos Futuros ---
-@login_required
-def module_placeholder_view(request, module_name):
-    """
-    View genérica para os módulos. Verifica se o usuário tem acesso
-    à aplicação correspondente antes de renderizar a página.
-    """
-    try:
-        app = Application.objects.get(name=module_name)
-        # Verifica se existe a relação e se o acesso é True
-        access_granted = UserApplicationAccess.objects.filter(
-            user=request.user, 
-            application=app,
-            has_access=True
-        ).exists()
-
-        if not access_granted:
-            messages.error(request, f"Você não tem permissão para acessar o módulo '{module_name}'.")
-            return redirect('core:user_list')
-
-    except Application.DoesNotExist:
-        messages.error(request, "Este módulo não existe.")
-        return redirect('core:user_list')
-
-    return render(request, 'core/module_placeholder.html', {'module_name': module_name})
 
 @login_required
 def user_password_change_view(request, pk):

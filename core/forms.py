@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm, PasswordChangeForm, SetPasswordForm
 from django.contrib.auth.models import Group
-from .models import CustomUser, Application, UserApplicationAccess
+from .models import CustomUser
 
 class CustomUserCreationForm(UserCreationForm):
     """
@@ -133,23 +133,3 @@ class AdminPasswordChangeForm(SetPasswordForm):
         self.fields['new_password2'].label = "Confirmação da nova senha"
         for field in self.fields.values():
             field.widget.attrs.update({'class': 'form-control'})
-
-class UserAccessForm(forms.Form):
-    """
-    Formulário para gerenciar o acesso de um usuário às aplicações.
-    """
-    applications = forms.ModelMultipleChoiceField(
-        queryset=Application.objects.all(),
-        widget=forms.CheckboxSelectMultiple,
-        required=False,
-        label="Aplicações com Acesso Permitido"
-    )
-
-    def __init__(self, *args, **kwargs):
-        user_instance = kwargs.pop('user_instance', None)
-        super().__init__(*args, **kwargs)
-        if user_instance:
-            self.fields['applications'].initial = Application.objects.filter(
-                userapplicationaccess__user=user_instance,
-                userapplicationaccess__has_access=True
-            )
