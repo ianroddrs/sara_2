@@ -20,8 +20,8 @@
         <a href="{% url 'core:user_profile' user.pk %}" class="sidebar-header-link">
             <div class="sidebar-header">
                 <img src="{{ user.profile_picture.url }}" alt="Foto de {{ user.username }}">
-                <div class="user-info">
-                    <h6>{{ user.get_full_name|default:user.username }}</h6>
+                <div class="user-info d-flex flex-column align-items-start justify-content-center">
+                    <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
                     <small>{% get_group user %}</small>
                 </div>
             </div>
@@ -29,22 +29,19 @@
 
         <nav class="sidebar-nav">
             <ul class="nav flex-column">
-                <li class="nav-item mt-3">
-                    <h6 class="nav-link text-muted" style="font-size: 0.8rem;">ANÁLISE</h6>
-                </li>
                 <li class="nav-item">
-                    <div class="btn-group w-100">
-                        <a href="{% url 'phoenix:dashboard' %}" class="btn btn-dark text-start flex-grow-1">
-                            <i class="fa-solid fa-feather-pointed"></i> Phoenix
+                    <div class="btn-group dropend w-100">
+                        <a href="{% url 'phoenix:dashboard' %}" class="btn btn-dark text-start">
+                            <i class="fa-solid fa-feather-pointed me-2"></i> Phoenix
                         </a>
-                        <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split" data-bs-toggle="dropdown" aria-expanded="false">
+                        <button type="button" class="btn btn-dark dropdown-toggle dropdown-toggle-split p-0" data-bs-toggle="dropdown" aria-expanded="false" style="width: 10px;">
                             <span class="visually-hidden">Toggle Dropdown</span>
                         </button>
                         <ul class="dropdown-menu dropdown-menu-dark">
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#bopSearchModal">Pesquisar BOP</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#procedureSearchModal">Pesquisar Procedimento</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportSearchModal">Pesquisar Relato</a></li>
-                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#personSearchModal">Pesquisar Pessoa</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#bopSearchModal">Boletim</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#procedureSearchModal">Procedimento</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#reportSearchModal">Relato</a></li>
+                            <li><a class="dropdown-item" href="#" data-bs-toggle="modal" data-bs-target="#personSearchModal">Autor/Vítima</a></li>
                         </ul>
                     </div>
                 </li>
