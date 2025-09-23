@@ -8,7 +8,7 @@ from django.urls import reverse_lazy, reverse
 from django.contrib import messages
 from django.contrib.auth import login, get_user_model, update_session_auth_hash
 from django.contrib.auth.models import Group
-from .models import Application, UserApplicationAccess
+from .models import Application
 from .forms import (
     CustomUserCreationForm,
     CustomUserChangeForm,
@@ -205,34 +205,36 @@ class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
 @login_required
 def manage_user_access_view(request, pk):
     """
-    Gerencia quais aplicações um usuário específico pode acessar.
+    Gerencia quais MÓDULOS um usuário específico pode acessar,
+    agrupados por Aplicação.
     """
     target_user = get_object_or_404(CustomUser, pk=pk)
 
-    # Validação de permissão
     if not user_can_manage_other(request.user, target_user):
         messages.error(request, "Você não tem permissão para gerenciar os acessos deste usuário.")
         return redirect('core:user_management')
     
     if request.method == 'POST':
-        form = UserAccessForm(request.POST, user_instance=target_user)
-        if form.is_valid():
-            applications = form.cleaned_data['applications']
-            
-            # Limpa acessos antigos e cria os novos
-            UserApplicationAccess.objects.filter(user=target_user).delete()
-            for app in applications:
-                UserApplicationAccess.objects.create(user=target_user, application=app, has_access=True)
-            
-            messages.success(request, f"Acessos do usuário {target_user.username} atualizados.")
-            return redirect('core:user_management')
-    else:
-        form = UserAccessForm(user_instance=target_user)
+        # Pega a lista de IDs dos módulos selecionados no formulário
+        module_ids = request.POST.getlist('modules')
+        # O método set() convenientemente limpa as permissões antigas e adiciona as novas
+        target_user.modules.set(module_ids)
+        
+        messages.success(request, f"Acessos do usuário {target_user.username} atualizados.")
+        return redirect('core:user_management')
 
-    return render(request, 'core/manage_user_access.html', {
-        'form': form,
-        'target_user': target_user
-    })
+    # Para o método GET
+    # Busca todas as aplicações com seus respectivos módulos para montar a tela
+    applications = Application.objects.prefetch_related('modules').all()
+    # Busca os IDs dos módulos que o usuário já possui
+    user_module_ids = set(target_user.modules.values_list('id', flat=True))
+
+    context = {
+        'target_user': target_user,
+        'applications': applications,
+        'user_module_ids': user_module_ids
+    }
+    return render(request, 'core/manage_user_access.html', context)
 
 
 # --- Placeholders para Módulos Futuros ---

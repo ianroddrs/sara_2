@@ -6,27 +6,63 @@
 <div class="main-header">
     <h1>Gerenciar Acesso de <span class="text-primary">{{ target_user.username }}</span></h1>
 </div>
-<p>Selecione as aplicações que este usuário poderá acessar.</p>
+<p>Selecione os módulos e funcionalidades que este usuário poderá acessar.</p>
 
 <div class="card">
     <div class="card-body">
         <form method="post">
             {% csrf_token %}
-            <fieldset class="mb-3">
-                <legend class="fs-6 mb-3">{{ form.applications.label }}</legend>
-                {% for checkbox in form.applications %}
-                    <div class="form-check">
-                        {{ checkbox.tag }}
-                        <label class="form-check-label" for="{{ checkbox.id_for_label }}">
-                            {{ checkbox.choice_label }}
-                        </label>
+            
+            {% for app in applications %}
+                <fieldset class="mb-4">
+                    <legend class="fs-5 border-bottom pb-2 mb-3 d-flex justify-content-between align-items-center">
+                        {{ app.name }}
+                        <button type="button" class="btn btn-sm btn-outline-secondary check-all" data-app-id="{{ app.id }}">Marcar Todos</button>
+                    </legend>
+                    <div class="app-modules-{{ app.id }}">
+                        {% for module in app.modules.all %}
+                            <div class="form-check">
+                                <input class="form-check-input" type="checkbox" name="modules" value="{{ module.id }}" id="module_{{ module.id }}"
+                                    {% if module.id in user_module_ids %}checked{% endif %}>
+                                <label class="form-check-label" for="module_{{ module.id }}">
+                                    {{ module.name }}
+                                </label>
+                            </div>
+                        {% empty %}
+                            <p class="text-muted fst-italic">Nenhum módulo cadastrado para esta aplicação.</p>
+                        {% endfor %}
                     </div>
-                {% endfor %}
-            </fieldset>
+                </fieldset>
+            {% endfor %}
+            
             <hr>
-            <a href="{% url 'core:user_management' %}" class="btn btn-light">Cancelar</a>
-            <button type="submit" class="btn btn-dark">Salvar Alterações</button>
+            <div class="d-flex justify-content-end">
+                <a href="{% url 'core:user_management' %}" class="btn btn-light me-2">Cancelar</a>
+                <button type="submit" class="btn btn-dark">Salvar Alterações</button>
+            </div>
         </form>
     </div>
 </div>
+{% endblock %}
+
+{% block extra_js %}
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    document.querySelectorAll('.check-all').forEach(button => {
+        button.addEventListener('click', function() {
+            const appId = this.getAttribute('data-app-id');
+            const checkboxes = document.querySelectorAll(`.app-modules-${appId} input[type="checkbox"]`);
+            
+            // Verifica se todos já estão marcados para alternar a funcionalidade do botão
+            const allChecked = Array.from(checkboxes).every(cb => cb.checked);
+            
+            checkboxes.forEach(checkbox => {
+                checkbox.checked = !allChecked;
+            });
+
+            this.textContent = allChecked ? 'Marcar Todos' : 'Desmarcar Todos';
+        });
+    });
+});
+</script>
 {% endblock %}
