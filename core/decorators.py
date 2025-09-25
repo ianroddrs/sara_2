@@ -2,33 +2,34 @@ from functools import wraps
 from django.shortcuts import redirect
 from django.contrib import messages
 
-
 def module_access_required(view_func):
     """
-    Decorator para views que verifica se o usuário tem permissão
-    para acessar um módulo. Ele descobre automaticamente o nome da view
-    sendo executada a partir do objeto request.
+    Decorator para views que verifica se o usuário tem permissão para acessar um
+    módulo, usando tanto o namespace da aplicação quanto o nome da view para
+    uma verificação precisa.
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
-        # Superusuários têm acesso a tudo
         if request.user.is_superuser:
             return view_func(request, *args, **kwargs)
 
-        # Pega o nome da view resolvida dinamicamente (ex: 'phoenix:dashboard')
-        # request.resolver_match é o objeto que contém os detalhes da URL resolvida
-        view_name = request.resolver_match.view_name
+        resolver_match = request.resolver_match
         
-        # Se não houver um nome de view (improvável em views nomeadas), nega o acesso
-        if not view_name:
-            messages.error(request, "Erro de configuração de permissão (view sem nome).")
+        # Pega o namespace da app (ex: 'phoenix') e o nome da url (ex: 'dashboard')
+        app_namespace = resolver_match.app_name
+        url_name = resolver_match.url_name
+
+        if not app_namespace or not url_name:
+            messages.error(request, "Erro de configuração de permissão (URL sem namespace ou nome).")
             return redirect('core:user_list')
 
-        # Verifica se o usuário tem o módulo específico em sua lista de permissões
-        if request.user.modules.filter(view_name=view_name).exists():
+        # A verificação agora é composta, garantindo a unicidade da permissão
+        if request.user.modules.filter(
+            application__app_namespace=app_namespace,
+            view_name=url_name
+        ).exists():
             return view_func(request, *args, **kwargs)
         
-        # Se não tiver permissão
         messages.error(request, "Você não tem permissão para acessar esta funcionalidade.")
         return redirect('core:user_list')
     

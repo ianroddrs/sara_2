@@ -58,14 +58,14 @@ class UserManagementView(ManagerialRoleRequiredMixin, ListView):
     context_object_name = 'users'
 
     def get_queryset(self):
-        user = self.request.user
-        if user.groups.filter(name='Administrador').exists():
-            return CustomUser.objects.all().prefetch_related('groups')
-        if user.groups.filter(name='Coordenador').exists():
-            return CustomUser.objects.filter(groups__name__in=['Coordenador', 'Gerente', 'Usuário']).distinct().prefetch_related('groups')
-        if user.groups.filter(name='Gerente').exists():
-            return CustomUser.objects.filter(groups__name__in=['Gerente', 'Usuário']).distinct().prefetch_related('groups')
-        return CustomUser.objects.none()
+        # user = self.request.user
+        # if user.groups.filter(name='Administrador').exists():
+        return CustomUser.objects.all().prefetch_related('groups')
+        # if user.groups.filter(name='Coordenador').exists():
+        #     return CustomUser.objects.filter(groups__name__in=['Coordenador', 'Gerente', 'Usuário']).distinct().prefetch_related('groups')
+        # if user.groups.filter(name='Gerente').exists():
+        #     return CustomUser.objects.filter(groups__name__in=['Gerente', 'Usuário']).distinct().prefetch_related('groups')
+        # return CustomUser.objects.none()
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

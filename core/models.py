@@ -6,15 +6,18 @@ from datetime import timedelta
 
 # Modelo para as Aplicações/Módulos do sistema
 class Application(models.Model):
-    """
-    Representa um módulo ou aplicação dentro da plataforma.
-    É o container de alto nível para agrupar funcionalidades.
-    """
     name = models.CharField(
         _("Nome da Aplicação"),
         max_length=100,
         unique=True,
         help_text=_("Ex: Phoenix, Análise de Dados")
+    )
+    # NOVO CAMPO: Liga a aplicação ao namespace da URL
+    app_namespace = models.CharField(
+        _("Namespace da Aplicação (para URLs)"),
+        max_length=50,
+        unique=True,
+        help_text=_("O 'app_name' definido no urls.py da aplicação. Ex: 'phoenix'")
     )
     description = models.TextField(_("Descrição"), blank=True)
 
@@ -27,10 +30,6 @@ class Application(models.Model):
         return self.name
 
 class Module(models.Model):
-    """
-    Representa uma view ou funcionalidade específica dentro de uma Application,
-    sendo a unidade final para o controle de acesso.
-    """
     application = models.ForeignKey(
         Application,
         related_name='modules',
@@ -43,10 +42,10 @@ class Module(models.Model):
         help_text=_("Ex: Dashboard de Ocorrências, Pesquisa por BOP")
     )
     view_name = models.CharField(
-        _("Nome da View (para verificação)"),
+        _("Nome da View (url name)"),
         max_length=100,
-        unique=True,
-        help_text=_("Identificador único da URL/View. Ex: 'phoenix:dashboard'")
+        # 'unique=True' foi removido daqui
+        help_text=_("O 'name' da URL no urls.py. Ex: 'dashboard', 'user_list'")
     )
     description = models.TextField(_("Descrição"), blank=True)
 
@@ -54,17 +53,16 @@ class Module(models.Model):
         verbose_name = _("Módulo")
         verbose_name_plural = _("Módulos")
         ordering = ['application', 'name']
+        # NOVA RESTRIÇÃO: O nome da view deve ser único DENTRO da aplicação
+        unique_together = ('application', 'view_name')
 
     def __str__(self):
         return f"{self.application.name} - {self.name}"
 
 
-# Modelo de Usuário Customizado
+# Modelo de Usuário Customizado (sem alterações aqui)
 class CustomUser(AbstractUser):
-    """
-    Herda do usuário padrão do Django, com controle de acesso
-    baseado em Módulos.
-    """
+    # ... (código existente sem alterações)
     profile_picture = models.ImageField(
         _("Foto de Perfil"),
         upload_to='profile_pics/',
@@ -82,7 +80,6 @@ class CustomUser(AbstractUser):
         null=True,
         blank=True
     )
-    # Relação direta com os Módulos que o usuário pode acessar
     modules = models.ManyToManyField(
         Module,
         related_name='users',
