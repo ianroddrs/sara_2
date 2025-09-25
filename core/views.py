@@ -127,10 +127,13 @@ class UserDeleteView(ManagerialRoleRequiredMixin, DeleteView):
 # --- Views Públicas e de Perfil ---
 
 class UserListView(LoginRequiredMixin, ListView):
+    """
+    Lista pública de todos os usuários ATIVOS do sistema.
+    """
     model = CustomUser
     template_name = 'core/user_list.html'
     context_object_name = 'users'
-    queryset = CustomUser.objects.all().prefetch_related('groups')
+    queryset = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
 
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)

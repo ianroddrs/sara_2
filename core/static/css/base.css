@@ -155,3 +155,8 @@ body {
 .avatar-sm { width: 40px; height: 40px; object-fit: cover; }
 .avatar-md { width: 120px; height: 120px; object-fit: cover; }
 .avatar-lg { width: 220px; height: 220px; object-fit: cover; }
+
+
+.table-hover > tbody > tr.table-light:hover > * {
+    background-color: #f0f1f2; /* Um cinza um pouco mais escuro para o hover de inativos */
+}

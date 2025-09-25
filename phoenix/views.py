@@ -3,7 +3,7 @@ from django.contrib.auth.decorators import login_required
 from core.decorators import module_access_required
 
 @login_required
-@module_access_required('phoenix:dashboard')
+@module_access_required
 def dashboard(request):
     """
     Exibe a página principal da aplicação Phoenix com o histórico 

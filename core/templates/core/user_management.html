@@ -20,16 +20,16 @@
                         <th>Usuário</th>
                         <th>Email</th>
                         <th>Grupo</th>
-                        <th>IP Permitido</th>
+                        <th>Status</th> {# NOVA COLUNA #}
                         <th class="text-end">Ações</th>
                     </tr>
                 </thead>
                 <tbody>
                     {% for u in users %}
-                    <tr>
+                    <tr class="{% if not u.is_active %}table-light text-muted{% endif %}">
                         <td>
                             <div class="d-flex align-items-center">
-                                <img src="{{ u.profile_picture.url }}" alt="Foto de {{ u.username }}" class="rounded-circle avatar-sm me-3">
+                                <img src="{{ u.profile_picture.url }}" alt="Foto de {{ u.username }}" class="rounded-circle avatar-sm me-3 {% if not u.is_active %}opacity-50{% endif %}">
                                 <div>
                                     <h6 class="mb-0">{{ u.get_full_name|default:u.username }}</h6>
                                     <small class="text-muted">@{{ u.username }}</small>
@@ -43,7 +43,13 @@
                         </td>
                         <td>{{ u.email }}</td>
                         <td><span class="badge bg-secondary fw-normal">{% get_group u %}</span></td>
-                        <td>{{ u.allowed_ip_address|default:"Qualquer IP" }}</td>
+                        <td>
+                            {% if u.is_active %}
+                                <span class="badge bg-success-subtle text-success-emphasis rounded-pill fw-normal">Ativo</span>
+                            {% else %}
+                                <span class="badge bg-secondary-subtle text-secondary-emphasis rounded-pill fw-normal">Inativo</span>
+                            {% endif %}
+                        </td>
                         <td class="text-end">
                             {% if u|is_manageable_by:request.user %}
                                 <a href="{% url 'core:user_edit' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="fa-solid fa-pencil"></i></a>
