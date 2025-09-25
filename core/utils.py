@@ -23,6 +23,10 @@ def user_can_manage_other(requesting_user, target_user):
     Verifica se o `requesting_user` tem permissão para gerenciar o `target_user`
     com base na hierarquia de grupos.
     """
+    
+    if requesting_user.is_superuser:
+        return True
+    
     # Ninguém pode gerenciar a si mesmo, exceto para o próprio perfil
     if requesting_user == target_user:
         return False
