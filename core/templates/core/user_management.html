@@ -33,7 +33,7 @@
                                 <div>
                                     <h6 class="mb-0">{{ u.get_full_name|default:u.username }}</h6>
                                     <small class="text-muted">@{{ u.username }}</small>
-                                    {% if u.is_online %}
+                                    {% if u.id in online_user_ids %}
                                         <div class="text-success small fw-bold" style="margin-top: 2px;">Online</div>
                                     {% else %}
                                         <div class="text-muted small" style="margin-top: 2px;">Acessado {{ u.last_activity|humanize_last_activity }}</div>

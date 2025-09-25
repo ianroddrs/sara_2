@@ -14,7 +14,7 @@ class Application(models.Model):
         _("Nome da Aplicação"),
         max_length=100,
         unique=True,
-        help_text=_("Ex: Phoenix, Nexus")
+        help_text=_("Ex: Phoenix, Análise de Dados")
     )
     description = models.TextField(_("Descrição"), blank=True)
 
@@ -94,9 +94,3 @@ class CustomUser(AbstractUser):
         verbose_name = _("Usuário")
         verbose_name_plural = _("Usuários")
         ordering = ['username']
-
-    def is_online(self):
-        """Verifica se a última atividade do usuário foi nos últimos 5 minutos."""
-        if not self.last_activity:
-            return False
-        return timezone.now() < self.last_activity + timedelta(minutes=5)

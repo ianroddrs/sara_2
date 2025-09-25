@@ -17,7 +17,7 @@
                 <h4 class="my-3 fw-bold">{{ profile_user.get_full_name|default:profile_user.username }}</h4>
                 <p class="text-muted mb-1">@{{ profile_user.username }}</p>
                 
-                {% if profile_user.is_online %}
+                {% if profile_user.id in online_user_ids %}
                     <p class="mb-2"><span class="text-success fw-bold">Online</span></p>
                 {% else %}
                     <p class="mb-2"><span class="text-muted">Acessado {{ profile_user.last_activity|humanize_last_activity }}</span></p>

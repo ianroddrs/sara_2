@@ -39,7 +39,7 @@
                 </div>
                 <div class="d-flex justify-content-between align-items-center">
                     <span class="badge bg-primary fw-normal fs-6">{% get_group u %}</span>
-                    {% if u.is_online %}
+                    {% if u.id in online_user_ids %}
                         <span class="text-success fw-bold small">Online</span>
                     {% else %}
                         <span class="text-muted small">Acessado {{ u.last_activity|humanize_last_activity }}</span>

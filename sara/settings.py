@@ -135,3 +135,9 @@ LOGOUT_REDIRECT_URL = 'core:login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
+
+# Tempo de vida da sessão em segundos (30 minutos = 1800 segundos)
+SESSION_COOKIE_AGE = 1800
+
+# Salva a sessão a cada requisição, atualizando o tempo de expiração
+SESSION_SAVE_EVERY_REQUEST = True

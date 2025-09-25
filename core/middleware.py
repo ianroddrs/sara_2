@@ -11,7 +11,5 @@ class UpdateLastActivityMiddleware:
     def __call__(self, request):
         response = self.get_response(request)
         if request.user.is_authenticated:
-            # Para otimizar, atualizamos o campo no banco de dados
-            # diretamente, sem chamar o .save() do modelo inteiro.
             CustomUser.objects.filter(pk=request.user.pk).update(last_activity=timezone.now())
         return response
