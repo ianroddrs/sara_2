@@ -62,7 +62,11 @@ class Module(models.Model):
 
 # Modelo de Usuário Customizado (sem alterações aqui)
 class CustomUser(AbstractUser):
-    # ... (código existente sem alterações)
+    THEME_CHOICES = (
+        ('light', 'Claro'),
+        ('dark', 'Escuro'),
+    )
+
     profile_picture = models.ImageField(
         _("Foto de Perfil"),
         upload_to='profile_pics/',
@@ -85,6 +89,13 @@ class CustomUser(AbstractUser):
         related_name='users',
         blank=True,
         verbose_name=_("Módulos com Acesso")
+    )
+
+    theme = models.CharField(
+        _("Tema"),
+        max_length=10,
+        choices=THEME_CHOICES,
+        default='light' # Tema padrão para novos usuários
     )
 
     class Meta:

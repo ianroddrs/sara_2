@@ -12,7 +12,8 @@ from .views import (
     UserUpdateView,
     manage_user_access_view,
     user_password_change_view,
-    UserDeleteView
+    UserDeleteView,
+    set_user_theme,
 )
 
 app_name = 'core'
@@ -35,5 +36,7 @@ urlpatterns = [
     path('users/<int:pk>/', UserProfileView.as_view(), name='user_profile'),
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
     path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),
+    # NOVA URL PARA O TEMA
+    path('set-theme/', set_user_theme, name='set_theme'),
     
 ]

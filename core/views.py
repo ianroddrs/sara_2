@@ -9,6 +9,9 @@ from django.contrib import messages
 from django.contrib.auth import login, get_user_model, update_session_auth_hash
 from django.contrib.auth.models import Group
 from .models import Application
+from django.http import JsonResponse
+from django.views.decorators.http import require_POST
+import json
 from .forms import (
     CustomUserCreationForm,
     CustomUserChangeForm,
@@ -225,3 +228,25 @@ def user_password_change_view(request, pk):
         'form': form,
         'target_user': target_user
     })
+
+# NOVA VIEW PARA O TEMA
+@login_required
+@require_POST
+def set_user_theme(request):
+    """
+    Recebe uma requisição POST com a escolha de tema do usuário
+    e a salva no seu perfil.
+    """
+    try:
+        data = json.loads(request.body)
+        theme = data.get('theme')
+
+        if theme in ['light', 'dark']:
+            user = request.user
+            user.theme = theme
+            user.save(update_fields=['theme'])
+            return JsonResponse({'status': 'ok', 'message': 'Tema atualizado com sucesso.'})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Tema inválido.'}, status=400)
+    except (json.JSONDecodeError, AttributeError):
+        return JsonResponse({'status': 'error', 'message': 'Requisição inválida.'}, status=400)

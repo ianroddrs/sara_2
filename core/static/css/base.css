@@ -8,6 +8,24 @@
     --border-color: #e1e1e1;
     --primary-accent: #ad85ff;
 }
+
+/* Define as variáveis para o tema escuro */
+body.dark {
+    --sidebar-bg: #111111; /* Mantém o mesmo */
+    --main-bg: #18191a;
+    --card-bg: #242526;
+    --text-dark: #f5f6f7;
+    --text-light: #111111;
+    --text-muted-dark: #a7a7a7; /* Mantém o mesmo */
+    --border-color: #3a3b3c;
+    --primary-accent: #ad85ff; /* Mantém o mesmo */
+}
+
+/* Adiciona transições suaves na troca de cor */
+body, .card, .main-content {
+    transition: background-color 0.3s ease, color 0.3s ease;
+}
+
 body {
     font-family: 'Manrope', sans-serif;
     background-color: var(--main-bg);
@@ -15,6 +33,8 @@ body {
     height: 100vh;
     overflow: hidden;
 }
+
+
 .sidebar {
     width: 240px;
     background-color: var(--sidebar-bg);
@@ -126,6 +146,7 @@ body {
     border: 1px solid var(--border-color);
     border-radius: 20px;
     box-shadow: none;
+    color: var(--text-dark); /* Adiciona cor de texto padrão para o card */
 }
 .table-hover > tbody > tr:hover > * {
     background-color: #f8f9fa;
@@ -159,4 +180,42 @@ body {
 
 .table-hover > tbody > tr.table-light:hover > * {
     background-color: #f0f1f2; /* Um cinza um pouco mais escuro para o hover de inativos */
+}
+
+
+/* Ajustes finos para elementos específicos no dark mode */
+body.dark .text-muted {
+    color: #a7a7a7 !important;
+}
+
+body.dark .table {
+    --bs-table-color: var(--text-dark);
+    --bs-table-border-color: var(--border-color);
+    --bs-table-hover-bg: #3a3b3c;
+}
+
+body.dark .modal-content {
+    background-color: var(--card-bg);
+    color: var(--text-dark);
+    border: 1px solid var(--border-color);
+}
+
+body.dark .btn-close {
+    filter: invert(1) grayscale(100%) brightness(200%);
+}
+
+/* Estilo para o botão de tema */
+.theme-toggle {
+    background: none;
+    border: none;
+    color: var(--text-muted-dark);
+    font-size: 1.1rem;
+    cursor: pointer;
+    padding: 0.25rem 0.5rem;
+    border-radius: 8px;
+    transition: color 0.2s, background-color 0.2s;
+}
+.theme-toggle:hover {
+    color: var(--text-light);
+    background-color: #3a3b3c;
 }
