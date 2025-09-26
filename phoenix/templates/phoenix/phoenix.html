@@ -1,0 +1,12 @@
+{% extends "core/base.html" %}
+{% load static %}
+
+{% block title %}Página do Phoenix{% endblock %}
+
+{% block extra_js %}
+    <script src="{% static 'phoenix/js/phoenix.js' %}" defer></script>
+{% endblock %}
+
+{% block content %}
+    <h1>Phoenix</h1>
+{% endblock %}

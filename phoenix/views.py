@@ -4,7 +4,7 @@ from core.decorators import module_access_required
 
 @login_required
 @module_access_required
-def dashboard(request):
+def home(request):
     """
     Exibe a página principal da aplicação Phoenix com o histórico 
     de pesquisas e itens salvos do usuário.
@@ -12,4 +12,4 @@ def dashboard(request):
     context = {
         'show_info_panel': True
     }
-    return render(request, 'phoenix/dashboard.html', context)
+    return render(request, 'phoenix/phoenix.html', context)
