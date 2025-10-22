@@ -1,7 +1,7 @@
 from django import template
 from django.utils import timezone
 from django.utils.timesince import timesince
-from core.utils import user_can_manage_other, get_user_group_level
+from base.utils import user_can_manage_other, get_user_group_level
 
 register = template.Library()
 

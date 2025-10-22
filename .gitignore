@@ -1,8 +1,10 @@
 env/
 db.sqlite3
-sara/__pycache__/
+core/.env
+core/instantclient/
 core/__pycache__/
-core/migrations/__pycache__/
-core/templatetags/__pycache__/
-phoenix/__pycache__/
-phoenix/migrations/__pycache__/
+apps/base/__pycache__/
+apps/base/migrations/__pycache__/
+apps/base/templatetags/__pycache__/
+apps/phoenix/__pycache__/
+apps/phoenix/migrations/__pycache__/

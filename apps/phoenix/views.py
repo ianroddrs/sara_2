@@ -1,6 +1,6 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from core.decorators import module_access_required
+from base.decorators import module_access_required
 
 @login_required
 @module_access_required
