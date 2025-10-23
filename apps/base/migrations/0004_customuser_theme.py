@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('core', '0003_application_app_namespace_alter_application_name_and_more'),
+        ('base', '0003_application_app_namespace_alter_application_name_and_more'),
     ]
 
     operations = [

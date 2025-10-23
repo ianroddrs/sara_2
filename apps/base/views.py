@@ -25,7 +25,7 @@ CustomUser = get_user_model()
 
 # --- Lógica de Autenticação com Validação de IP ---
 class CustomLoginView(BaseLoginView):
-    template_name = 'core/login.html'
+    template_name = 'login.html'
 
     def form_valid(self, form):
         user = form.get_user()
@@ -57,7 +57,7 @@ class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
 class UserManagementView(ManagerialRoleRequiredMixin, ListView):
     model = CustomUser
-    template_name = 'core/user_management.html'
+    template_name = 'user_management.html'
     context_object_name = 'users'
 
     def get_queryset(self):
@@ -78,7 +78,7 @@ class UserManagementView(ManagerialRoleRequiredMixin, ListView):
 class UserCreateView(ManagerialRoleRequiredMixin, CreateView):
     model = CustomUser
     form_class = CustomUserCreationForm
-    template_name = 'core/profile_form.html'
+    template_name = 'profile_form.html'
     success_url = reverse_lazy('core:user_management')
 
     def get_form_kwargs(self):
@@ -93,7 +93,7 @@ class UserCreateView(ManagerialRoleRequiredMixin, CreateView):
 class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
     model = CustomUser
     form_class = AdminUserUpdateForm
-    template_name = 'core/profile_form.html'
+    template_name = 'profile_form.html'
     success_url = reverse_lazy('core:user_management')
     
     def get_object(self, queryset=None):
@@ -113,7 +113,7 @@ class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
 
 class UserDeleteView(ManagerialRoleRequiredMixin, DeleteView):
     model = CustomUser
-    template_name = 'core/user_confirm_delete.html'
+    template_name = 'user_confirm_delete.html'
     success_url = reverse_lazy('core:user_management')
 
     def get_object(self, queryset=None):
@@ -134,7 +134,7 @@ class UserListView(LoginRequiredMixin, ListView):
     Lista pública de todos os usuários ATIVOS do sistema.
     """
     model = CustomUser
-    template_name = 'core/user_list.html'
+    template_name = 'user_list.html'
     context_object_name = 'users'
     queryset = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
 
@@ -145,7 +145,7 @@ class UserListView(LoginRequiredMixin, ListView):
 
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = CustomUser
-    template_name = 'core/user_profile.html'
+    template_name = 'user_profile.html'
     context_object_name = 'profile_user'
 
     def get_context_data(self, **kwargs):
@@ -171,11 +171,11 @@ def self_profile_update_view(request):
     else:
         form = CustomUserChangeForm(instance=request.user)
     
-    return render(request, 'core/profile_form.html', {'form': form})
+    return render(request, 'profile_form.html', {'form': form})
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm
-    template_name = 'core/password_change_form.html'
+    template_name = 'password_change_form.html'
     success_url = reverse_lazy('core:user_list')
 
     def form_valid(self, form):
@@ -205,7 +205,7 @@ def manage_user_access_view(request, pk):
         'applications': applications,
         'user_module_ids': user_module_ids
     }
-    return render(request, 'core/manage_user_access.html', context)
+    return render(request, 'manage_user_access.html', context)
 
 @login_required
 def user_password_change_view(request, pk):
@@ -224,7 +224,7 @@ def user_password_change_view(request, pk):
     else:
         form = AdminPasswordChangeForm(target_user)
 
-    return render(request, 'core/admin_password_change_form.html', {
+    return render(request, 'admin_password_change_form.html', {
         'form': form,
         'target_user': target_user
     })

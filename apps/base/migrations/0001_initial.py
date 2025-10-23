@@ -36,7 +36,7 @@ class Migration(migrations.Migration):
                 ('name', models.CharField(help_text='Ex: Dashboard de Ocorrências, Pesquisa por BOP', max_length=100, verbose_name='Nome do Módulo')),
                 ('view_name', models.CharField(help_text="Identificador único da URL/View. Ex: 'phoenix:dashboard'", max_length=100, unique=True, verbose_name='Nome da View (para verificação)')),
                 ('description', models.TextField(blank=True, verbose_name='Descrição')),
-                ('application', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='core.application', verbose_name='Aplicação')),
+                ('application', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='modules', to='base.application', verbose_name='Aplicação')),
             ],
             options={
                 'verbose_name': 'Módulo',
@@ -63,7 +63,7 @@ class Migration(migrations.Migration):
                 ('last_activity', models.DateTimeField(blank=True, null=True, verbose_name='Última Atividade')),
                 ('groups', models.ManyToManyField(blank=True, help_text='The groups this user belongs to. A user will get all permissions granted to each of their groups.', related_name='user_set', related_query_name='user', to='auth.group', verbose_name='groups')),
                 ('user_permissions', models.ManyToManyField(blank=True, help_text='Specific permissions for this user.', related_name='user_set', related_query_name='user', to='auth.permission', verbose_name='user permissions')),
-                ('modules', models.ManyToManyField(blank=True, related_name='users', to='core.module', verbose_name='Módulos com Acesso')),
+                ('modules', models.ManyToManyField(blank=True, related_name='users', to='base.module', verbose_name='Módulos com Acesso')),
             ],
             options={
                 'verbose_name': 'Usuário',

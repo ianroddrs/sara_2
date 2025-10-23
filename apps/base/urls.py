@@ -1,4 +1,4 @@
-# --- Arquivo de URLs do App: core/urls.py ---
+# --- Arquivo de URLs do App: urls.py ---
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import (

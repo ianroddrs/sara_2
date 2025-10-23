@@ -1,5 +1,5 @@
 # Este arquivo deve ser criado manualmente após rodar `makemigrations` pela primeira vez.
-# python manage.py makemigrations core
+# python manage.py makemigrations base
 # Crie o arquivo 0002_create_groups.py e cole este conteúdo.
 
 from django.db import migrations
@@ -19,7 +19,7 @@ class Migration(migrations.Migration):
 
     dependencies = [
         # Depende da migração anterior do seu app (geralmente '0001_initial')
-        ('core', '0001_initial'),
+        ('base', '0001_initial'),
     ]
 
     operations = [

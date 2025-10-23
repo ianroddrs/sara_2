@@ -1,8 +1,8 @@
 env/
 db.sqlite3
-core/.env
-core/instantclient/
-core/__pycache__/
+.env
+instantclient/
+__pycache__/
 apps/base/__pycache__/
 apps/base/migrations/__pycache__/
 apps/base/templatetags/__pycache__/

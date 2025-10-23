@@ -42,7 +42,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'core.middleware.UpdateLastActivityMiddleware',
+    'apps.base.middleware.UpdateLastActivityMiddleware',
 ]
 
 ROOT_URLCONF = 'core.urls'
@@ -58,7 +58,7 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
-                'core.context_processors.search_forms_context',
+                'apps.base.context_processors.search_forms_context',
             ],
         },
     },
@@ -119,11 +119,11 @@ STATIC_URL = 'static/'
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
-AUTH_USER_MODEL = 'core.CustomUser'
+AUTH_USER_MODEL = 'base.CustomUser'
 
-LOGIN_URL = 'core:login'
-LOGIN_REDIRECT_URL = 'core:user_list'
-LOGOUT_REDIRECT_URL = 'core:login'
+LOGIN_URL = 'base:login'
+LOGIN_REDIRECT_URL = 'base:user_list'
+LOGOUT_REDIRECT_URL = 'base:login'
 
 MEDIA_URL = '/media/'
 MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
