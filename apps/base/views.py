@@ -23,12 +23,17 @@ from .utils import user_can_manage_other, get_online_user_ids
 
 CustomUser = get_user_model()
 
+def home(request):
+    return render(request, "home.html")
+
 # --- Lógica de Autenticação com Validação de IP ---
 class CustomLoginView(BaseLoginView):
     template_name = 'login.html'
 
     def form_valid(self, form):
         user = form.get_user()
+
+        print('oiiii')
         
         if user.allowed_ip_address:
             x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
@@ -167,7 +172,7 @@ def self_profile_update_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Seu perfil foi atualizado com sucesso!')
-            return redirect('core:user_profile', pk=request.user.pk)
+            return redirect('base:user_profile', pk=request.user.pk)
     else:
         form = CustomUserChangeForm(instance=request.user)
     

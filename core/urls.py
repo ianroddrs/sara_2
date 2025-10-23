@@ -4,7 +4,7 @@ from django.conf import settings
 from django.conf.urls.static import static
 
 urlpatterns = [
-    path('admin/', admin.site.urls),
+    # path('admin/', admin.site.urls),
     path('', include('apps.base.urls')),
     path('phoenix/', include('apps.phoenix.urls')),
     path('nexus/', include('apps.nexus.urls')),

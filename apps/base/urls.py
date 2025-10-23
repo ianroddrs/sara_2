@@ -2,6 +2,7 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import (
+    home,
     CustomLoginView,
     UserManagementView,
     UserListView,
@@ -16,12 +17,15 @@ from .views import (
     set_user_theme,
 )
 
-app_name = 'core'
+app_name = 'base'
 
 urlpatterns = [
     # Autenticação
     path('login/', CustomLoginView.as_view(), name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='core:login'), name='logout'),
+    
+    # Tela Inicial
+    path('', home, name='home'),
     
     # Gerenciamento de Usuários (Hierárquico)
     path('management/users/', UserManagementView.as_view(), name='user_management'),
@@ -32,7 +36,7 @@ urlpatterns = [
     path('management/users/delete/<int:pk>/', UserDeleteView.as_view(), name='user_delete'),
     
     # Perfil e Listas Públicas
-    path('', UserListView.as_view(), name='user_list'), # Home page
+    path('users/', UserListView.as_view(), name='user_list'), # Home page
     path('users/<int:pk>/', UserProfileView.as_view(), name='user_profile'),
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
     path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),

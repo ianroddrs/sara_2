@@ -26,7 +26,7 @@
     {% for u in users %}
     <div class="col">
         <div class="card h-100 user-card shadow-sm">
-            <a href="{% url 'core:user_profile' u.pk %}" class="stretched-link"></a>
+            <a href="{% url 'base:user_profile' u.pk %}" class="stretched-link"></a>
             <div class="card-body p-4">
                 <div class="d-flex align-items-center mb-3">
                     <img src="{{ u.profile_picture.url }}" alt="Foto de {{ u.username }}" 

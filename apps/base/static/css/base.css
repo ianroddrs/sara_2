@@ -1,221 +1,167 @@
 :root {
-    --sidebar-bg: #111111;
-    --main-bg: #f9f9f9;
-    --card-bg: #ffffff;
-    --text-dark: #111111;
-    --text-light: #fefefe;
-    --text-muted-dark: #a7a7a7;
-    --border-color: #e1e1e1;
-    --primary-accent: #ad85ff;
+    /* Paleta de cores personalizada para o Bootstrap */
+    --bs-primary: #4A90E2;
+    --bs-primary-rgb: 74, 144, 226;
+    --bs-secondary: #50E3C2;
+    --bs-secondary-rgb: 80, 227, 194;
+    --bs-body-bg: #f8f9fa; /* Fundo geral mais suave */
+    --bs-body-font-family: 'Poppins', sans-serif;
 }
 
-/* Define as variáveis para o tema escuro */
-body.dark {
-    --sidebar-bg: #111111; /* Mantém o mesmo */
-    --main-bg: #18191a;
-    --card-bg: #242526;
-    --text-dark: #f5f6f7;
-    --text-light: #111111;
-    --text-muted-dark: #a7a7a7; /* Mantém o mesmo */
-    --border-color: #3a3b3c;
-    --primary-accent: #ad85ff; /* Mantém o mesmo */
-}
-
-/* Adiciona transições suaves na troca de cor */
-body, .card, .main-content {
-    transition: background-color 0.3s ease, color 0.3s ease;
-}
-
+/* Ajustes finos no layout */
 body {
-    font-family: 'Manrope', sans-serif;
-    background-color: var(--main-bg);
     display: flex;
-    height: 100vh;
-    overflow: hidden;
+    min-height: 100vh;
+    flex-direction: column;
 }
 
+.main-wrapper {
+    display: flex;
+    flex-grow: 1;
+}
 
+#main-container{
+    overflow-y: auto;
+    height: 100vh;
+}
+
+/* Estilo da barra lateral */
 .sidebar {
-    width: 240px;
-    background-color: var(--sidebar-bg);
-    color: var(--text-light);
+    width: 280px;
+    background-color: #1a2533; /* Um azul escuro mais moderno */
+    transition: margin-left 0.3s;
+    padding-top: 1.5rem;
     display: flex;
     flex-direction: column;
-    padding: 1.5rem 1rem;
-    flex-shrink: 0;
 }
-.sidebar-header {
-    display: flex;
-    align-items: center;
-    padding: 0.5rem;
-    background-color: #1d1d1d;
-    border: 1px solid #323232;
-    border-radius: 12px;
-    margin-bottom: 2rem;
-    transition: background-color 0.2s;
-}
-.sidebar-header-link {
-    text-decoration: none;
-    color: inherit;
-}
-.sidebar-header-link:hover .sidebar-header {
-    background-color: #2a2a2a;
-}
-.sidebar-header img {
-    width: 40px;
-    height: 40px;
-    object-fit: cover;
-    border-radius: 50%;
-    margin-right: 0.75rem;
-}
-.sidebar-header .user-info h6 {
-    margin: 0;
-    font-size: 0.9rem;
-    font-weight: 500;
-}
-.sidebar-header .user-info small {
-    font-size: 0.75rem;
-    color: var(--text-muted-dark);
-    word-break: break-all;
-}
-.sidebar-nav {
-    flex-grow: 1;
-}
-.sidebar-nav .nav-link, .sidebar-footer .nav-link {
-    color: var(--text-muted-dark);
-    font-size: 0.9rem;
-    padding: 0.75rem 1rem;
-    display: flex;
-    align-items: center;
-    border-radius: 8px;
-    margin-bottom: 0.5rem;
-    transition: background-color 0.2s, color 0.2s;
-}
-.sidebar-nav .nav-link i, .sidebar-footer .nav-link i {
-    width: 20px;
-    margin-right: 1rem;
-    text-align: center;
-}
-.sidebar-nav .nav-link:hover, .sidebar-footer .nav-link:hover {
-    color: var(--text-light);
-    background-color: #2a2a2a;
-}
-.sidebar-nav .nav-link.active, .sidebar-footer .nav-link.active {
-    color: var(--text-light);
-    background-color: #1d1d1d;
+
+.sidebar .navbar-brand {
+    color: #fff;
+    margin-bottom: 1.5rem;
+    font-size: 1.5rem;
     font-weight: 600;
 }
-.sidebar-footer {
-    border-top: 1px solid #323232;
-    padding-top: 1rem;
+
+.sidebar .navbar-brand .brand-highlight {
+    color: var(--bs-primary);
 }
-.logout-button {
-    background: none;
-    border: none;
-    color: var(--text-muted-dark);
-    padding: 0;
-    width: 100%;
-    text-align: left;
+
+.sidebar .nav-link {
+    color: #adb5bd;
+    font-size: 0.95rem;
+    padding: 0.75rem 1.5rem;
+    border-left: 3px solid transparent;
+    transition: all 0.3s ease;
 }
-.logout-button:hover {
-        color: var(--text-light);
+
+.sidebar .nav-link:hover {
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.05);
+    border-left-color: var(--bs-primary);
 }
-.main-wrapper {
-    flex-grow: 1;
-    display: flex;
-    overflow: hidden;
+
+.sidebar .nav-link.active {
+    color: #fff;
+    font-weight: 500;
+    background-color: rgba(var(--bs-primary-rgb), 0.1);
+    border-left-color: var(--bs-primary);
 }
+
+.sidebar .nav-link .bi {
+    margin-right: 1rem;
+    font-size: 1.1rem;
+}
+
+/* Conteúdo Principal */
 .main-content {
     flex-grow: 1;
-    padding: 1.5rem 2rem;
+    padding: 2rem;
     overflow-y: auto;
 }
-.main-header {
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    padding-bottom: 1.5rem;
-}
-.main-header h1 {
-    font-size: 1.75rem;
-    font-weight: 700;
-    margin: 0;
-}
+
+/* Estilo dos Cards */
 .card {
-    background-color: var(--card-bg);
-    border: 1px solid var(--border-color);
-    border-radius: 20px;
-    box-shadow: none;
-    color: var(--text-dark); /* Adiciona cor de texto padrão para o card */
-}
-.table-hover > tbody > tr:hover > * {
-    background-color: #f8f9fa;
-}
-
-/* --- Estilos para o Painel de Informações --- */
-.info-panel {
-    width: 350px;
-    background: #fff;
-    padding: 1.5rem;
-    border-left: 1px solid var(--border-color);
-    flex-shrink: 0;
-    transition: margin-right 0.3s ease-in-out;
-}
-
-/* Oculta o painel por padrão */
-.info-panel {
-    margin-right: -350px; /* Move para fora da tela */
-}
-
-/* Exibe o painel quando a classe 'with-info-panel' está presente */
-.main-wrapper.with-info-panel .info-panel {
-    margin-right: 0;
-}
-
-
-.avatar-sm { width: 40px; height: 40px; object-fit: cover; }
-.avatar-md { width: 120px; height: 120px; object-fit: cover; }
-.avatar-lg { width: 220px; height: 220px; object-fit: cover; }
-
-
-.table-hover > tbody > tr.table-light:hover > * {
-    background-color: #f0f1f2; /* Um cinza um pouco mais escuro para o hover de inativos */
-}
-
-
-/* Ajustes finos para elementos específicos no dark mode */
-body.dark .text-muted {
-    color: #a7a7a7 !important;
-}
-
-body.dark .table {
-    --bs-table-color: var(--text-dark);
-    --bs-table-border-color: var(--border-color);
-    --bs-table-hover-bg: #3a3b3c;
-}
-
-body.dark .modal-content {
-    background-color: var(--card-bg);
-    color: var(--text-dark);
-    border: 1px solid var(--border-color);
-}
-
-body.dark .btn-close {
-    filter: invert(1) grayscale(100%) brightness(200%);
-}
-
-/* Estilo para o botão de tema */
-.theme-toggle {
-    background: none;
     border: none;
-    color: var(--text-muted-dark);
-    font-size: 1.1rem;
-    cursor: pointer;
-    padding: 0.25rem 0.5rem;
-    border-radius: 8px;
-    transition: color 0.2s, background-color 0.2s;
+    border-radius: 0.75rem; /* Bordas mais arredondadas */
+    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
+    transition: transform 0.2s ease-in-out;
 }
-.theme-toggle:hover {
-    color: var(--text-light);
-    background-color: #3a3b3c;
+
+.card:hover {
+    transform: translateY(-5px);
+}
+
+.card-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    font-weight: 600;
+}
+
+/* Header (Topo) */
+.top-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0.75rem 2rem;
+}
+
+.top-header .form-control {
+    background-color: #f1f3f5;
+    border: none;
+}
+
+.top-header .dropdown-menu {
+    border-radius: 0.75rem;
+    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
+}
+
+/* Rodapé */
+.footer {
+    background-color: #212529;
+    color: #adb5bd;
+    padding: 2rem 0;
+    font-size: 0.9rem;
+}
+
+.footer a {
+    color: #f8f9fa;
+    text-decoration: none;
+    transition: color 0.2s;
+}
+
+.footer a:hover {
+    color: var(--bs-primary);
+}
+
+#loading{
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: fixed;
+    width: 100%;
+    height: 100%;
+    top: 0;
+    left: 0;
+    z-index: 9999;
+    backdrop-filter: blur(4);
+    background-color: #1e263081;
+}
+
+/* Responsividade */
+@media (max-width: 992px) {
+    .sidebar {
+        margin-left: -280px;
+        position: fixed;
+        top: 0;
+        bottom: 0;
+        z-index: 1045; /* Acima do backdrop do offcanvas */
+    }
+    .sidebar.show {
+        margin-left: 0;
+    }
+}
+
+
+.list-group-item-action:hover,
+.list-group-item-action:focus {
+    background-color: #f0f0f5; /* Um cinza bem claro para o efeito hover */
 }

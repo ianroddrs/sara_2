@@ -1,8 +1,80 @@
-/**
- * Classe Sara: O núcleo de interações do front-end.
- * Responsável por funcionalidades globais como requisições AJAX,
- * notificações (toasts), modais e manipulação geral do DOM.
- */
+class App {
+    constructor() {
+        this.csrfToken = this._getCookie('csrftoken');
+        this.loadingContainer = document.getElementById('loading')
+        this.alertContainer = document.getElementById('messages')
+
+        window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
+    }
+
+    _getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
+    async request(url, method = 'GET', data = null) {
+        const options = {
+            method: method,
+            headers: {
+                'X-CSRFToken': this.csrfToken,
+            },
+        };
+
+        if (data) {
+            if (!(data instanceof FormData)) {
+                options.headers['Content-Type'] = 'application/json';
+                options.body = JSON.stringify(data);
+            } else {
+                options.body = data;
+            }
+        }
+
+        try {
+            const response = await fetch(url, options);
+            if (!response.ok) {
+                const errorData = await response.json().catch(() => ({ message: response.statusText }));
+                throw new Error(errorData.message || 'Erro na requisição.');
+            }
+            const contentType = response.headers.get('content-type');
+            if (contentType && contentType.includes('application/json')) {
+                return await response.json();
+            } else {
+                throw new Error(errorData.message || 'Erro na requisição.');
+            }
+        } catch (error) {
+            this.showAlert(error, 'danger');
+        }
+    }
+
+    showAlert(message, type) {
+        const alertHtml = `
+            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
+                ${message}
+                <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+            </div>
+        `;
+
+        this.alertContainer.innerHTML = alertHtml;
+    }
+
+
+    toggleLoading() {
+        this.loadingContainer.classList.toggle('d-none')
+    }
+}
+
+window.app = new App();
+
 class Sara {
     constructor() {
         this.csrfToken = document.querySelector('meta[name="csrf-token"]').getAttribute('content');
@@ -165,9 +237,3 @@ class Sara {
         alert(content); // Simulação simples
     }
 }
-
-// Para garantir que o código só execute após o DOM estar pronto
-document.addEventListener('DOMContentLoaded', () => {
-    // Instancia a classe principal para que ela esteja disponível globalmente, se necessário.
-    window.sara = new Sara();
-});
