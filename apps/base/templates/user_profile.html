@@ -27,15 +27,15 @@
                 
                 <div class="d-grid gap-2">
                     {% if request.user == profile_user %}
-                        <a href="{% url 'core:self_profile_update' %}" class="btn btn-dark"><i class="fa-solid fa-pencil me-2"></i>Editar Meu Perfil</a>
-                        <a href="{% url 'core:password_change' %}" class="btn btn-outline-dark"><i class="fa-solid fa-lock me-2"></i>Alterar Senha</a>
+                        <a href="{% url 'base:self_profile_update' %}" class="btn btn-dark"><i class="fa-solid fa-pencil me-2"></i>Editar Meu Perfil</a>
+                        <a href="{% url 'base:password_change' %}" class="btn btn-outline-dark"><i class="fa-solid fa-lock me-2"></i>Alterar Senha</a>
                     {% endif %}
                     {% if profile_user|is_manageable_by:request.user %}
-                        <a href="{% url 'core:manage_user_access' profile_user.pk %}" class="btn btn-secondary"><i class="fa-solid fa-key me-2"></i>Gerenciar Acessos</a>
+                        <a href="{% url 'base:manage_user_access' profile_user.pk %}" class="btn btn-secondary"><i class="fa-solid fa-key me-2"></i>Gerenciar Acessos</a>
                         {% if request.user != profile_user %}
-                            <a href="{% url 'core:user_edit' profile_user.pk %}" class="btn btn-dark"><i class="fa-solid fa-user-pen me-2"></i>Editar Usuário</a>
-                            <a href="{% url 'core:admin_password_change' profile_user.pk %}" class="btn btn-outline-secondary"><i class="fa-solid fa-lock me-2"></i>Alterar Senha</a>
-                            <a href="{% url 'core:user_delete' profile_user.pk %}" class="btn btn-outline-danger mt-3"><i class="fa-solid fa-trash-alt me-2"></i>Excluir Usuário</a>
+                            <a href="{% url 'base:user_edit' profile_user.pk %}" class="btn btn-dark"><i class="fa-solid fa-user-pen me-2"></i>Editar Usuário</a>
+                            <a href="{% url 'base:admin_password_change' profile_user.pk %}" class="btn btn-outline-secondary"><i class="fa-solid fa-lock me-2"></i>Alterar Senha</a>
+                            <a href="{% url 'base:user_delete' profile_user.pk %}" class="btn btn-outline-danger mt-3"><i class="fa-solid fa-trash-alt me-2"></i>Excluir Usuário</a>
                         {% endif %}
                     {% endif %}
                 </div>

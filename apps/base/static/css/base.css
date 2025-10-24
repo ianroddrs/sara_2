@@ -46,6 +46,16 @@ body {
     color: var(--bs-primary);
 }
 
+
+.sidebar .nav-item .nav-link .bi {
+    margin-right: 1rem;
+    font-size: 1.1rem;
+}
+
+.sidebar .nav-item .nav-link.sub-link .bi {
+    font-size: 1rem;
+}
+
 .sidebar .nav-link {
     color: #adb5bd;
     font-size: 0.95rem;
@@ -54,22 +64,54 @@ body {
     transition: all 0.3s ease;
 }
 
-.sidebar .nav-link:hover {
-    color: #fff;
-    background-color: rgba(255, 255, 255, 0.05);
-    border-left-color: var(--bs-primary);
+.sidebar .nav-link.sub-link {
+    padding: 0.25rem 1.5rem;
+    font-size: 0.94rem;
+    margin-left: 25px ;
 }
 
-.sidebar .nav-link.active {
+.sidebar .nav-item:hover .nav-link:not(.sub-link),
+.sidebar .nav-item:hover .dropdown-toggle{
+    color: #fff;
+    border-left-color: var(--bs-primary);
+    background-color: rgba(255, 255, 255, 0.05);
+}
+
+.sidebar .nav-link.sub-link:hover{
+    color: #fff;
+    background-color: rgba(170, 170, 170, 0.05);
+}
+
+.sidebar .nav-link.active:not(.sub-link),
+.sidebar .nav-link.active:not(.sub-link) ~ .dropdown-toggle{
     color: #fff;
     font-weight: 500;
     background-color: rgba(var(--bs-primary-rgb), 0.1);
     border-left-color: var(--bs-primary);
 }
 
-.sidebar .nav-link .bi {
-    margin-right: 1rem;
-    font-size: 1.1rem;
+.sidebar .nav-item:hover .dropdown-toggle:hover{
+    color: #fff;
+    background-color: rgba(255, 255, 255, 0.123);
+}
+
+
+.sidebar .sidebar-header img {
+    width: 40px;
+    height: 40px;
+    object-fit: cover;
+    border-radius: 50%;
+    margin-right: 0.75rem;
+}
+.sidebar .sidebar-header .user-info h6 {
+    margin: 0;
+    font-size: 0.9rem;
+    font-weight: 500;
+}
+.sidebar .sidebar-header .user-info small {
+    font-size: 0.75rem;
+    color: var(--text-muted-dark);
+    word-break: break-all;
 }
 
 /* Conteúdo Principal */
@@ -77,6 +119,19 @@ body {
     flex-grow: 1;
     padding: 2rem;
     overflow-y: auto;
+}
+
+
+/* Header (Topo) */
+.top-header {
+    background-color: #fff;
+    border-bottom: 1px solid #e9ecef;
+    padding: 0.75rem 2rem;
+}
+
+.top-header .form-control {
+    background-color: #f1f3f5;
+    border: none;
 }
 
 /* Estilo dos Cards */
@@ -97,55 +152,6 @@ body {
     font-weight: 600;
 }
 
-/* Header (Topo) */
-.top-header {
-    background-color: #fff;
-    border-bottom: 1px solid #e9ecef;
-    padding: 0.75rem 2rem;
-}
-
-.top-header .form-control {
-    background-color: #f1f3f5;
-    border: none;
-}
-
-.top-header .dropdown-menu {
-    border-radius: 0.75rem;
-    box-shadow: 0 8px 24px rgba(0,0,0,0.1);
-}
-
-/* Rodapé */
-.footer {
-    background-color: #212529;
-    color: #adb5bd;
-    padding: 2rem 0;
-    font-size: 0.9rem;
-}
-
-.footer a {
-    color: #f8f9fa;
-    text-decoration: none;
-    transition: color 0.2s;
-}
-
-.footer a:hover {
-    color: var(--bs-primary);
-}
-
-#loading{
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    position: fixed;
-    width: 100%;
-    height: 100%;
-    top: 0;
-    left: 0;
-    z-index: 9999;
-    backdrop-filter: blur(4);
-    background-color: #1e263081;
-}
-
 /* Responsividade */
 @media (max-width: 992px) {
     .sidebar {
@@ -158,10 +164,4 @@ body {
     .sidebar.show {
         margin-left: 0;
     }
-}
-
-
-.list-group-item-action:hover,
-.list-group-item-action:focus {
-    background-color: #f0f0f5; /* Um cinza bem claro para o efeito hover */
 }

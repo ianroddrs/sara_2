@@ -16,32 +16,56 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a href="{% url 'phoenix:phoenix' %}"
-                    class="nav-link {{ url_name|is_active:'phoenix' }}">
-                    <i class="bi bi-fire"></i>Phoenix
-                </a>
+                <div class="btn-group dropdown w-100">
+                    <a href="{% url 'phoenix:phoenix' %}"
+                        class="nav-link {{ url_name|is_active:'phoenix' }} w-100">
+                        <i class="bi bi-fire"></i>Phoenix
+                    </a>
+                    <button 
+                        class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
+                        type="button" data-bs-toggle="collapse" data-bs-target="#phoenix-collapse" 
+                        aria-expanded="false" aria-controls="phoenix-collapse"></button>
+                </div>
+                <nav  class="collapse nav flex-column" id="phoenix-collapse">
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Boletim</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-inboxes"></i>Procedimento</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-blockquote-left"></i>Relato</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-person-standing"></i>Pessoa</a>
+                </nav >
             </li>
             <li class="nav-item">
-                <a href="{% url 'nexus:nexus' %}"
-                    class="nav-link {{ url_name|is_active:'nexus' }}">
-                    <i class="bi bi-bezier2"></i>Nexus
-                </a>
+                <div class="btn-group dropdown w-100">
+                    <a href="{% url 'nexus:nexus' %}"
+                        class="nav-link {{ url_name|is_active:'nexus' }} w-100">
+                        <i class="bi bi-bezier2"></i>Nexus
+                    </a>
+                    <button 
+                        class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
+                        type="button" data-bs-toggle="collapse" data-bs-target="#nexus-collapse" 
+                        aria-expanded="false" aria-controls="nexus-collapse"></button>
+                </div>
+                <nav  class="collapse nav flex-column" id="nexus-collapse">
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-symmetry-vertical"></i>Duplicados</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-journal-medical"></i>DataSUS</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-badge-cc"></i>CaoCriminal</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Aditamento</a>
+                    <a class="nav-link sub-link" href="#"><i class="bi bi-search"></i>Consultor</a>
+                </nav >
             </li>
         </ul>
     </nav>
-
     <nav class="sidebar-footer">
-        <a href="{% url 'base:user_profile' user.pk %}" class="sidebar-header-link">
+        <a href="{% url 'base:user_profile' user.pk %}" class="nav-link text-center px-3 fs-1">
             <div class="sidebar-header d-flex justify-content-between align-items-center w-100">
                 <div class="d-flex align-items-center">
-                    <img src="{{ user.profile_picture.url }}" alt="Foto de {{ user.username }}" style="width: 45px;">
+                    <img src="{{ user.profile_picture.url }}" alt="Foto de {{ user.username }}">
                     <div class="user-info d-flex flex-column align-items-start justify-content-center">
                         <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
                         <small>{% get_group user %}</small>
                     </div>
                 </div>
-                <button class="theme-toggle ms-2" id="theme-toggle-btn" title="Alterar tema" data-url="{% url 'base:set_theme' %}">
-                    <i class="bi {% if user.theme == 'dark' %}bi-brightness-high-fill{% else %}bi-moon-stars-fill{% endif %}"></i>
+                <button class="btn btn-dark border-0">
+                    <i class="bi bi-gear-fill"></i>
                 </button>
             </div>
         </a>

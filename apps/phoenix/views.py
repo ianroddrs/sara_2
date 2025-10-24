@@ -10,6 +10,6 @@ def home(request):
     de pesquisas e itens salvos do usuário.
     """
     context = {
-        'show_info_panel': True
+        'info_panel': True
     }
-    return render(request, 'phoenix/phoenix.html', context)
+    return render(request, 'phoenix.html', context)
