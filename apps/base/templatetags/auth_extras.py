@@ -5,6 +5,14 @@ from apps.base.utils import user_can_manage_other, get_user_group_level
 
 register = template.Library()
 
+@register.filter(name='is_active')
+def is_active(request_name, name):
+    """
+    Verifica se a url está ativa no momento.
+    Uso: {{ url_name|is_active }}
+    """
+    return 'active' if request_name == name else ''
+
 @register.filter(name='has_group')
 def has_group(user, group_name):
     """
