@@ -28,12 +28,10 @@ def home(request):
 
 # --- Lógica de Autenticação com Validação de IP ---
 class CustomLoginView(BaseLoginView):
-    template_name = 'login.html'
+    template_name = 'base/login.html'
 
     def form_valid(self, form):
         user = form.get_user()
-
-        print('oiiii')
         
         if user.allowed_ip_address:
             x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')

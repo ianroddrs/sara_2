@@ -1,7 +1,18 @@
-{% extends 'base.html' %}
+{% extends 'base/base.html' %}
 {% load static %}
 
 {% block static %}
+{% endblock %}
+
+{% block breadcrumb %}
+<nav class="ms-2" aria-label="breadcrumb">
+    <ol class="breadcrumb d-flex align-items-center m-0">
+        <li class="breadcrumb-item">
+            <a href="#" class="text-decoration-none"><div class="fw-medium fs-2 text-dark">Home</div></a>
+        </li>
+        <!-- <li class="breadcrumb-item active mt-1" aria-current="page">Boletim</li> -->
+    </ol>
+</nav>
 {% endblock %}
 
 {% block content %}

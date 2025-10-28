@@ -22,7 +22,7 @@ app_name = 'base'
 urlpatterns = [
     # Autenticação
     path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='core:login'), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='base:login'), name='logout'),
     
     # Tela Inicial
     path('', home, name='home'),

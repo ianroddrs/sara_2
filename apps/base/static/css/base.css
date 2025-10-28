@@ -56,9 +56,16 @@ body {
     font-size: 1rem;
 }
 
-.sidebar .nav-link {
+.sidebar .nav-link,
+.sidebar .sidebar-user,
+.sidebar .sidebar-settings a,
+.sidebar .sidebar-settings button {
     color: #adb5bd;
     font-size: 0.95rem;
+    text-decoration: none;
+}
+
+.sidebar .nav-link{
     padding: 0.75rem 1.5rem;
     border-left: 3px solid transparent;
     transition: all 0.3s ease;
@@ -96,22 +103,46 @@ body {
 }
 
 
-.sidebar .sidebar-header img {
+.sidebar .sidebar-user .user-info{
+    background-color: rgba(255, 255, 255, 0.05);
+    transition: all 0.3s ease;
+}
+
+.sidebar .sidebar-user .user-info:hover{
+    background-color: rgba(255, 255, 255, 0.08);
+     color: #fff;
+}
+
+.sidebar .sidebar-user .user-info img {
     width: 40px;
     height: 40px;
     object-fit: cover;
     border-radius: 50%;
     margin-right: 0.75rem;
 }
-.sidebar .sidebar-header .user-info h6 {
+
+.sidebar .sidebar-user .user-info h6 {
     margin: 0;
     font-size: 0.9rem;
     font-weight: 500;
 }
-.sidebar .sidebar-header .user-info small {
+
+.sidebar .sidebar-user .user-info small {
     font-size: 0.75rem;
     color: var(--text-muted-dark);
     word-break: break-all;
+}
+
+.sidebar .sidebar-settings a,
+.sidebar .sidebar-settings button {
+    background-color: transparent;
+    border: none;
+    padding: 0;
+}
+
+.sidebar .sidebar-settings a:hover,
+.sidebar .sidebar-settings button:hover {
+    color: #fff;
 }
 
 /* Conteúdo Principal */
@@ -119,19 +150,6 @@ body {
     flex-grow: 1;
     padding: 2rem;
     overflow-y: auto;
-}
-
-
-/* Header (Topo) */
-.top-header {
-    background-color: #fff;
-    border-bottom: 1px solid #e9ecef;
-    padding: 0.75rem 2rem;
-}
-
-.top-header .form-control {
-    background-color: #f1f3f5;
-    border: none;
 }
 
 /* Estilo dos Cards */
