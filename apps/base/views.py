@@ -1,12 +1,13 @@
 from django.core.exceptions import PermissionDenied
 from django.contrib.auth.views import LoginView as BaseLoginView, PasswordChangeView
+from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
-from django.contrib.auth import login, get_user_model, update_session_auth_hash
+from django.contrib.auth import login, get_user_model, update_session_auth_hash, authenticate
 from django.contrib.auth.models import Group
 from .models import Application
 from django.http import JsonResponse
@@ -26,9 +27,33 @@ CustomUser = get_user_model()
 def home(request):
     return render(request, "home.html")
 
-# --- Lógica de Autenticação com Validação de IP ---
+def login(request):
+    if request.method == 'POST':
+        form = AuthenticationForm(request, data=request.POST)
+        if form.is_valid():
+            user = form.get_user()
+            if user is not None:
+                if user.allowed_ip_address:
+                    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+                    if x_forwarded_for:
+                        request_ip = x_forwarded_for.split(',')[0]
+                    else:
+                        request_ip = request.META.get('REMOTE_ADDR')
+
+                    if user.allowed_ip_address != request_ip:
+                        messages.error(request, "Acesso negado. Você está tentando acessar de um endereço de IP não autorizado.")
+                        return redirect('base:home')
+                else:
+                    login(request, user)
+                    next_url = request.POST.get('next')
+                    if next_url:
+                        return redirect(next_url)
+        else:
+            messages.error(request, "Acesso negado. Usuário ou senha incorreto.")
+            return redirect('base:home')
+
 class CustomLoginView(BaseLoginView):
-    template_name = 'base/login.html'
+    template_name = 'home.html'
 
     def form_valid(self, form):
         user = form.get_user()
@@ -46,6 +71,13 @@ class CustomLoginView(BaseLoginView):
         
         login(self.request, user)
         return redirect(self.get_success_url())
+
+    def form_invalid(self, form):
+        """
+        Adiciona uma mensagem de erro explícita para ser exibida no template.
+        """
+        messages.error(self.request, "Usuário ou senha inválidos. Por favor, tente novamente.")
+        return super().form_invalid(form)
 
 # --- Mixins de Permissão Hierárquica ---
 class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
