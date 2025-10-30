@@ -1,30 +1,18 @@
 class App {
     constructor() {
-        this.csrfToken = this._getCookie('csrftoken');
+        this.csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
         this.loadingContainer = document.getElementById('loading')
         this.alertContainer = document.getElementById('messages')
 
-        window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
-    }
+        this.formularioLogin = document.getElementById('login-form')
 
-    _getCookie(name) {
-        let cookieValue = null;
-        if (document.cookie && document.cookie !== '') {
-            const cookies = document.cookie.split(';');
-            for (let i = 0; i < cookies.length; i++) {
-                const cookie = cookies[i].trim();
-                if (cookie.substring(0, name.length + 1) === (name + '=')) {
-                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
-                    break;
-                }
-            }
-        }
-        return cookieValue;
+        this.formularioLogin.addEventListener('submit', async (event) => {this.login(event)})
+        window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
     }
 
     async request(url, method = 'GET', data = null) {
         const options = {
-            method: method,
+            method: method.toUpperCase(),
             headers: {
                 'X-CSRFToken': this.csrfToken,
             },
@@ -71,6 +59,19 @@ class App {
     toggleLoading() {
         this.loadingContainer.classList.toggle('d-none')
     }
+
+
+    login(event){
+        event.preventDefault();
+        const urlParams = new URLSearchParams(window.location.search);
+        const formData = new FormData(this.formularioLogin);
+
+        if(urlParams.has('next')){ 
+            formData.append('next', urlParams.get('next'))
+        }
+
+        this.request('/api/login/', 'POST', formData)
+    }
 }
 
 window.app = new App();
@@ -86,17 +87,8 @@ class Sara {
 
         this._initThemeToggleButton(); // Inicia a funcionalidade do tema
         
-        console.log("Sara inicializada. Pronta para ajudar!");
     }
 
-    /**
-     * Envia uma requisição assíncrona (AJAX) para o backend.
-     * Usa a API Fetch e adiciona o token CSRF automaticamente.
-     * @param {string} url - A URL do endpoint.
-     * @param {string} method - O método HTTP (GET, POST, PUT, DELETE, etc.).
-     * @param {object} [data=null] - O corpo da requisição (para POST, PUT).
-     * @returns {Promise<object>} - Uma Promise que resolve com a resposta JSON.
-     */
     async sendRequest(url, method = 'GET', data = null) {
         const options = {
             method: method.toUpperCase(),

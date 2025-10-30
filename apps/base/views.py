@@ -7,7 +7,7 @@ from django.views.generic import ListView, DetailView, UpdateView, CreateView, D
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
 from django.contrib import messages
-from django.contrib.auth import login, get_user_model, update_session_auth_hash, authenticate
+from django.contrib.auth import login as auth_login, get_user_model, update_session_auth_hash, authenticate
 from django.contrib.auth.models import Group
 from .models import Application
 from django.http import JsonResponse
@@ -27,13 +27,14 @@ CustomUser = get_user_model()
 def home(request):
     return render(request, "home.html")
 
-def login(request):
+def login_api(request):
+    print(request.POST)
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
             if user is not None:
-                if user.allowed_ip_address:
+                if hasattr(user, 'allowed_ip_address') and user.allowed_ip_address:
                     x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
                     if x_forwarded_for:
                         request_ip = x_forwarded_for.split(',')[0]
@@ -43,11 +44,14 @@ def login(request):
                     if user.allowed_ip_address != request_ip:
                         messages.error(request, "Acesso negado. Você está tentando acessar de um endereço de IP não autorizado.")
                         return redirect('base:home')
+                
+                auth_login(request, user)
+
+                next_url = request.POST.get('next')
+                if next_url:
+                    return redirect(next_url)
                 else:
-                    login(request, user)
-                    next_url = request.POST.get('next')
-                    if next_url:
-                        return redirect(next_url)
+                    return redirect('base:home')
         else:
             messages.error(request, "Acesso negado. Usuário ou senha incorreto.")
             return redirect('base:home')

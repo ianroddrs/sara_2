@@ -1,8 +1,9 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-from apps.base.decorators import module_access_required
+from apps.base.decorators import module_access_required, login_required_with_message
 
-@login_required
+# @login_required
+@login_required_with_message
 @module_access_required
 def home(request):
     """

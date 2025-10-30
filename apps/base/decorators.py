@@ -1,6 +1,7 @@
 from functools import wraps
 from django.shortcuts import redirect
 from django.contrib import messages
+from django.utils.safestring import mark_safe
 
 def module_access_required(view_func):
     """
@@ -33,4 +34,32 @@ def module_access_required(view_func):
         messages.error(request, "Você não tem permissão para acessar esta funcionalidade.")
         return redirect('core:user_list')
     
+    return _wrapped_view
+
+
+def login_required_with_message(view_func):
+    """
+    Decorador que verifica se o usuário está logado.
+    Se não estiver, adiciona uma mensagem de erro e redireciona
+    para a página anterior ou para a home.
+    """
+    @wraps(view_func)
+    def _wrapped_view(request, *args, **kwargs):
+        if request.user.is_authenticated:
+            return view_func(request, *args, **kwargs)
+        
+        resolver_match = request.resolver_match
+        app_namespace = resolver_match.app_name
+        
+        login_link = '<a href="#login-modal" data-bs-toggle="modal" data-bs-target="#login-modal"><strong>autenticação</strong></a>'
+        message_text = f"<strong>Acesso restrito</strong>. Faça {login_link} para acessar a aplicação <strong>{app_namespace.upper()}</strong>."
+        messages.info(request, mark_safe(message_text))
+        
+        referer_url = request.META.get('HTTP_REFERER')
+        
+        if referer_url:
+            return redirect(referer_url)
+        else:
+            return redirect('home')
+
     return _wrapped_view

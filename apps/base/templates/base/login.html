@@ -2,7 +2,7 @@
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content rounded-0 shadow">
             
-            <div class="modal-header pb-4 border-bottom-0">
+            <div class="modal-header mb-5">
                 <h1 class="modal-title fs-5" id="loginModalLabel">
                     <i class="bi bi-exclude"></i>
                     <span>SARA</span>
@@ -14,7 +14,7 @@
                 
                 <h2 class="fs-5 fw-bold mb-4 text-center">Acessar sua conta</h2>
 
-                <form method="post" action="{% url 'base:login' %}">
+                <form method="post" action="{% url 'base:login' %}" id="login-form">
                     {% csrf_token %}
 
                     {% if form.errors %}

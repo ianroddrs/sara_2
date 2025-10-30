@@ -3,7 +3,7 @@ from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import (
     home,
-    login,
+    login_api,
     UserManagementView,
     UserListView,
     UserProfileView,
@@ -21,7 +21,7 @@ app_name = 'base'
 
 urlpatterns = [
     # Autenticação
-    path('login/', login, name='login'),
+    path('api/login/', login_api, name='login'),
     path('logout/', auth_views.LogoutView.as_view(next_page='base:login'), name='logout'),
     
     # Tela Inicial
