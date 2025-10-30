@@ -87,7 +87,7 @@ body {
 
 .sidebar .nav-link.sub-link:hover{
     color: #fff;
-    background-color: rgba(170, 170, 170, 0.05);
+    /* background-color: rgba(170, 170, 170, 0.05); */
 }
 
 .sidebar .nav-link.active:not(.sub-link),
@@ -105,22 +105,32 @@ body {
 
 
 .sidebar .sidebar-user .user-info{
-    background-color: rgba(255, 255, 255, 0.05);
+    /* background-color: rgba(255, 255, 255, 0.05); */
     transition: all 0.3s ease;
     width: 100%;
 }
 
+.sidebar #login-button.sidebar-user .user-info{
+    background-color: rgba(255, 255, 255, 0.035);
+}
+
 .sidebar .sidebar-user .user-info:hover{
-    background-color: rgba(255, 255, 255, 0.08);
+    background-color: rgba(255, 255, 255, 0.05);
     color: #fff;
 }
 
+.sidebar .sidebar-user .user-info:hover img{
+    border-color:#ffffff49;
+}
+
 .sidebar .sidebar-user .user-info img {
-    width: 40px;
-    height: 40px;
+    width: 45px;
+    height: 45px;
     object-fit: cover;
     border-radius: 50%;
     margin-right: 0.75rem;
+    transition: all 0.3s ease;
+    border: 3px solid rgba(255, 255, 255, 0.05);
 }
 
 .sidebar .sidebar-user .user-info h6 {

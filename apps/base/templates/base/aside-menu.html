@@ -57,10 +57,10 @@
 
     <hr class="mt-3 mb-0 text-light">
 
-    <nav class="sidebar-footer p-4">
+    <nav class="sidebar-footer px-4 pt-4">
         {% if user.is_authenticated %}
         <a href="{% url 'base:user_profile' user.pk %}" class="sidebar-user">
-            <div class="d-flex align-items-center user-info p-2">
+            <div class="d-flex align-items-center user-info p-2 rounded-pill">
                 <img src="{{ user.profile_picture.url }}" alt="Foto de {{ user.username }}">
                 <div>
                     <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
@@ -69,9 +69,9 @@
             </div>  
         </a>
         <ul class="list-unstyled sidebar-settings mt-2 ms-1">
-            <li class="ms-1 mt-1">
+            <li class="ms-2 mt-1">
                 <a href="#"><i class="bi bi-gear me-1"></i> Configurações</a></li>
-            <li class="ms-1 mt-1">
+            <li class="ms-2 mt-1">
                 <form action="{% url 'base:logout' %}" method="post">
                     {% csrf_token %}
                     <button type="submit" class="">
@@ -81,11 +81,11 @@
             </li>
         </ul>
         {% else %}
-        <div class="sidebar-user">
-            <button type="button" class="d-flex align-items-center be user-info p-2 px-3 border-0" data-bs-toggle="modal" data-bs-target="#login-modal">
-                <i class="bi bi-box-arrow-right me-3 fs-5"></i> Login
-            </button>
-        </div>
+        <a href="#login-modal" class="sidebar-user" data-bs-toggle="modal" data-bs-target="#login-modal" id="login-button">
+            <div class="d-flex align-items-center user-info p-2 rounded-pill mb-4">
+                <i class="bi bi-box-arrow-right mx-3 fs-5"></i> Login
+            </div>  
+        </a>
         {% endif %}
     </nav>
 </aside>
