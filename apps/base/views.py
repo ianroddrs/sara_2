@@ -28,33 +28,32 @@ def home(request):
     return render(request, "home.html")
 
 def login_api(request):
-    print(request.POST)
     if request.method == 'POST':
         form = AuthenticationForm(request, data=request.POST)
         if form.is_valid():
             user = form.get_user()
-            if user is not None:
-                if hasattr(user, 'allowed_ip_address') and user.allowed_ip_address:
-                    x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-                    if x_forwarded_for:
-                        request_ip = x_forwarded_for.split(',')[0]
-                    else:
-                        request_ip = request.META.get('REMOTE_ADDR')
 
-                    if user.allowed_ip_address != request_ip:
-                        messages.error(request, "Acesso negado. Você está tentando acessar de um endereço de IP não autorizado.")
-                        return redirect('base:home')
-                
-                auth_login(request, user)
+            if hasattr(user, 'allowed_ip_address') and user.allowed_ip_address:
+                x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+                request_ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
-                next_url = request.POST.get('next')
-                if next_url:
-                    return redirect(next_url)
-                else:
-                    return redirect('base:home')
+                if user.allowed_ip_address != request_ip:
+                    messages.error(request, "Acesso negado. Você está tentando acessar de um endereço de IP não autorizado.")
+                    return redirect(reverse('base:home'))
+            
+            auth_login(request, user)
+
+            next_url = request.POST.get('next') or reverse('base:home')
+            messages.success(request, "Login realizado com sucesso!")
+            
+            return redirect(next_url)
         else:
             messages.error(request, "Acesso negado. Usuário ou senha incorreto.")
-            return redirect('base:home')
+            return redirect(reverse('base:home'))
+    else:
+        messages.error(request, "")
+        return redirect(reverse('base:home'))
+        
 
 class CustomLoginView(BaseLoginView):
     template_name = 'home.html'

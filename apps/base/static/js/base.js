@@ -17,17 +17,23 @@ class App {
                 'X-CSRFToken': this.csrfToken,
             },
         };
+        
+        try {
+            if (data) {
+                if (!(data instanceof FormData)) {
+                    let formulario = new FormData();
 
-        if (data) {
-            if (!(data instanceof FormData)) {
-                options.headers['Content-Type'] = 'application/json';
-                options.body = JSON.stringify(data);
-            } else {
+                    for (const [chave, valor] of Object.entries(data)) {
+                        formulario.append(chave, valor);
+                    }
+                    
+                    data = formulario
+
+                }
+
                 options.body = data;
             }
-        }
 
-        try {
             const response = await fetch(url, options);
             if (!response.ok) {
                 const errorData = await response.json().catch(() => ({ message: response.statusText }));
@@ -45,9 +51,16 @@ class App {
     }
 
     showAlert(message, type) {
+        let icon = ''
+        if(type=='danger'){
+            icon = '<i class="bi bi-exclamation-triangle-fill me-2"></i>'
+        }
         const alertHtml = `
-            <div class="alert alert-${type} alert-dismissible fade show" role="alert">
-                ${message}
+            <div class="alert alert-${type} alert-dismissible fade show d-flex align-items-center" role="alert">
+                ${icon}
+                <div>
+                    ${message}
+                </div>
                 <button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
             </div>
         `;
@@ -64,13 +77,13 @@ class App {
     login(event){
         event.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
-        const formData = new FormData(this.formularioLogin);
+        const formulario = new FormData(this.formularioLogin);
 
         if(urlParams.has('next')){ 
-            formData.append('next', urlParams.get('next'))
+            formulario.append('next', urlParams.get('next'))
         }
 
-        this.request('/api/login/', 'POST', formData)
+        this.request('/api/login/', 'POST', formulario)
     }
 }
 
