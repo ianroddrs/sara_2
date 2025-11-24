@@ -21,15 +21,19 @@ from .forms import (
     CustomPasswordChangeForm,
     AdminPasswordChangeForm
 )
-from .utils import user_can_manage_other, get_online_user_ids
+from .utils import user_can_manage_other
 
 CustomUser = get_user_model()
 
 def home(request):
 
+    users = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
+
     context = {
+        'users':users,
         'info_panel':True
     }
+    
     return render(request, "home.html", context)
 
 @require_http_methods(["POST"])
@@ -72,6 +76,9 @@ def login_api(request):
             status=401
         )
         
+def settings(request):
+    context = {}
+    return render(request, 'base/settings.html', context)
 
 # --- Mixins de Permissão Hierárquica ---
 class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -98,11 +105,6 @@ class UserManagementView(ManagerialRoleRequiredMixin, ListView):
         # if user.groups.filter(name='Gerente').exists():
         #     return CustomUser.objects.filter(groups__name__in=['Gerente', 'Usuário']).distinct().prefetch_related('groups')
         # return CustomUser.objects.none()
-
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['online_user_ids'] = get_online_user_ids()
-        return context
 
 class UserCreateView(ManagerialRoleRequiredMixin, CreateView):
     model = CustomUser
@@ -167,11 +169,6 @@ class UserListView(LoginRequiredMixin, ListView):
     context_object_name = 'users'
     queryset = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
 
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['online_user_ids'] = get_online_user_ids()
-        return context
-
 class UserProfileView(LoginRequiredMixin, DetailView):
     model = CustomUser
     template_name = 'user_profile.html'
@@ -185,7 +182,6 @@ class UserProfileView(LoginRequiredMixin, DetailView):
 
         context['all_applications'] = all_applications
         context['user_module_ids'] = user_module_ids
-        context['online_user_ids'] = get_online_user_ids()
         
         return context
 

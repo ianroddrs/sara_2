@@ -4,6 +4,7 @@ from django.contrib.auth import views as auth_views
 from .views import (
     home,
     login_api,
+    settings,
     UserManagementView,
     UserListView,
     UserProfileView,
@@ -26,6 +27,10 @@ urlpatterns = [
     
     # Tela Inicial
     path('', home, name='home'),
+
+    # Configurações
+    path('settings', settings, name='settigns'),
+    path('settings/set-theme/', set_user_theme, name='set_theme'),
     
     # Gerenciamento de Usuários (Hierárquico)
     path('management/users/', UserManagementView.as_view(), name='user_management'),
@@ -41,7 +46,5 @@ urlpatterns = [
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
     path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),
     
-    # NOVA URL PARA O TEMA
-    path('set-theme/', set_user_theme, name='set_theme'),
     
 ]

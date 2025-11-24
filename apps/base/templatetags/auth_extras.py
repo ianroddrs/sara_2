@@ -2,6 +2,7 @@ from django import template
 from django.utils import timezone
 from django.utils.timesince import timesince
 from apps.base.utils import user_can_manage_other, get_user_group_level
+from django.contrib.sessions.models import Session
 
 register = template.Library()
 
@@ -61,3 +62,18 @@ def humanize_last_activity(last_activity_datetime):
         return "Ontem"
     
     return f"há {diff.days} dias"
+
+
+@register.filter(name='is_online')
+def is_online(user):
+    id = user.id
+    active_sessions = Session.objects.filter(expire_date__gte=timezone.now())
+    user_ids = set()
+
+    for session in active_sessions:
+        session_data = session.get_decoded()
+        user_id = session_data.get('_auth_user_id')
+        if user_id:
+            user_ids.add(int(user_id))
+    
+    return True if id in user_ids else False
