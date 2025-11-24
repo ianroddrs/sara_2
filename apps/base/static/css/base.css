@@ -27,17 +27,16 @@ body {
 
 /* Estilo da barra lateral */
 #sidebarInfo{
-    background-color: var(--bs-info-bg);
+    background-color: var(--bs-info-bg) !important;
+    width: 350px !important;
 }
 
 #sidebarMenu{
-    background-color: #1a2533; /* Um azul escuro mais moderno */
+    background-color: #1a2533 !important; /* Um azul escuro mais moderno */
+    width: 280px !important;
 }
 
 .sidebar {
-    width: 280px;
-    transition: margin-left 0.3s;
-    padding-top: 1.5rem;
     display: flex;
     flex-direction: column;
 }
@@ -185,23 +184,4 @@ body {
     background-color: #fff;
     border-bottom: 1px solid #e9ecef;
     font-weight: 600;
-}
-
-/* Responsividade */
-@media (max-width: 992px) {
-    .sidebar {
-        margin-left: -280px;
-        position: fixed;
-        z-index: 1045; /* Acima do backdrop do offcanvas */
-        top: 0;
-        bottom: 0;    
-    }
-
-    .sidebar#sidebarInfo.show{
-        margin-right: 0;
-    }
-
-    .sidebar#sidebarMenu.show {
-        margin-left: 0;
-    }
 }

@@ -1,95 +1,97 @@
 {% load auth_extras %}
 {% with request.resolver_match.app_name as app_name %}
-<aside class="sidebar" id="sidebarMenu">
-    <a class="navbar-brand text-center px-3 fs-1 mb-5" href="{% url 'base:home' %}">
-        <i class="bi bi-exclude text-white"></i>
-        <span class="text-white">SARA</span>
-        <small class="brand-highlight d-block" style="font-size: 12px;">Sistema de Apoio à Revisão e Análise</small>
-    </a>
+<aside class="sidebar offcanvas-lg offcanvas-start" id="sidebarMenu" tabindex="-1" aria-labelledby="sidebarMenuLabel">
+    <div class="offcanvas-body d-flex flex-column flex-grow-1 p-0">
+        <a class="navbar-brand text-center px-3 fs-1 mb-5 pt-4" href="{% url 'base:home' %}">
+            <i class="bi bi-exclude text-white"></i>
+            <span class="text-white">SARA</span>
+            <small class="brand-highlight d-block" style="font-size: 12px;">Sistema de Apoio à Revisão e Análise</small>
+        </a>
 
-    <nav class="sidebar-nav flex-grow-1">
-        <ul class="nav flex-column ">
-            <li class="nav-item">
-                <a href="{% url 'base:home' %}"
-                    class="nav-link {{ app_name|is_active:'base' }}">
-                    <i class="bi bi-house-door-fill"></i>Home
-                </a>
-            </li>
-            <li class="nav-item">
-                <div class="btn-group dropdown w-100">
-                    <a href="{% url 'phoenix:home' %}"
-                        class="nav-link {{ app_name|is_active:'phoenix' }} w-100">
-                        <i class="bi bi-fire"></i>Phoenix
+        <nav class="sidebar-nav flex-grow-1">
+            <ul class="nav flex-column ">
+                <li class="nav-item">
+                    <a href="{% url 'base:home' %}"
+                        class="nav-link {{ app_name|is_active:'base' }}">
+                        <i class="bi bi-house-door-fill"></i>Home
                     </a>
-                    <button 
-                        class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
-                        type="button" data-bs-toggle="collapse" data-bs-target="#phoenix-collapse" 
-                        aria-expanded="false" aria-controls="phoenix-collapse"></button>
-                </div>
-                <nav  class="collapse nav flex-column" id="phoenix-collapse">
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Boletim</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-inboxes"></i>Procedimento</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-blockquote-left"></i>Relato</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-person-standing"></i>Pessoa</a>
-                </nav >
-            </li>
-            <li class="nav-item">
-                <div class="btn-group dropdown w-100">
-                    <a href="{% url 'nexus:nexus' %}"
-                        class="nav-link {{ app_name|is_active:'nexus' }} w-100">
-                        <i class="bi bi-bezier2"></i>Nexus
-                    </a>
-                    <button 
-                        class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
-                        type="button" data-bs-toggle="collapse" data-bs-target="#nexus-collapse" 
-                        aria-expanded="false" aria-controls="nexus-collapse"></button>
-                </div>
-                <nav  class="collapse nav flex-column" id="nexus-collapse">
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-symmetry-vertical"></i>Duplicados</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-journal-medical"></i>DataSUS</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-badge-cc"></i>CaoCriminal</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Aditamento</a>
-                    <a class="nav-link sub-link" href="#"><i class="bi bi-search"></i>Consultor</a>
-                </nav >
-            </li>
-        </ul>
-    </nav>
-
-    <hr class="mt-3 mb-0 text-light">
-
-    <nav class="sidebar-footer p-4">
-        <div class="sidebar-user">
-            <div class="d-flex align-items-center user-info p-2 rounded-pill">
-                {% if user.is_authenticated %}
-                <a href="{% url 'base:user_profile' user.pk %}" class=" d-flex align-items-center flex-grow-1">
-                    <img src="{{ user.profile_picture.url }}" alt="Foto de {{ user.username }}">
-                    <div>
-                        <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
-                        <small>{% get_group user %}</small>
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group dropdown w-100">
+                        <a href="{% url 'phoenix:home' %}"
+                            class="nav-link {{ app_name|is_active:'phoenix' }} w-100">
+                            <i class="bi bi-fire"></i>Phoenix
+                        </a>
+                        <button 
+                            class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
+                            type="button" data-bs-toggle="collapse" data-bs-target="#phoenix-collapse" 
+                            aria-expanded="false" aria-controls="phoenix-collapse"></button>
                     </div>
-                </a>
-                <div class="text-end sidebar-settings">
-                    <a href="#" class="fs-5"><i class="bi bi-gear-fill me-3"></i></a>
-                </div>
-                {% else %}
-                    <a href="#login-modal" class="sidebar-user" data-bs-toggle="modal" data-bs-target="#login-modal" id="login-button">
-                        <i class="bi bi-box-arrow-right mx-3 fs-5"></i> Login
-                    </a>
-                {% endif %}
-            </div>  
-            {% if user.is_authenticated %}
-            <ul class="list-unstyled m-0 ms-1 mt-2">
-                <li class="mt-1">
-                    <form action="{% url 'base:logout' %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit" class="btn btn-danger rounded-pill w-100">
-                            <i class="bi bi-box-arrow-left me-1"></i> Sair
-                        </button>
-                    </form>
+                    <nav  class="collapse nav flex-column" id="phoenix-collapse">
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Boletim</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-inboxes"></i>Procedimento</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-blockquote-left"></i>Relato</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-person-standing"></i>Pessoa</a>
+                    </nav >
+                </li>
+                <li class="nav-item">
+                    <div class="btn-group dropdown w-100">
+                        <a href="{% url 'nexus:nexus' %}"
+                            class="nav-link {{ app_name|is_active:'nexus' }} w-100">
+                            <i class="bi bi-bezier2"></i>Nexus
+                        </a>
+                        <button 
+                            class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
+                            type="button" data-bs-toggle="collapse" data-bs-target="#nexus-collapse" 
+                            aria-expanded="false" aria-controls="nexus-collapse"></button>
+                    </div>
+                    <nav  class="collapse nav flex-column" id="nexus-collapse">
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-symmetry-vertical"></i>Duplicados</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-journal-medical"></i>DataSUS</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-badge-cc"></i>CaoCriminal</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Aditamento</a>
+                        <a class="nav-link sub-link" href="#"><i class="bi bi-search"></i>Consultor</a>
+                    </nav >
                 </li>
             </ul>
-            {% endif %}
-        </div>
-    </nav>
+        </nav>
+
+        <hr class="mt-3 mb-0 text-light">
+
+        <nav class="sidebar-footer p-4">
+            <div class="sidebar-user">
+                <div class="d-flex align-items-center user-info p-2 rounded-pill">
+                    {% if user.is_authenticated %}
+                    <a href="{% url 'base:user_profile' user.pk %}" class=" d-flex align-items-center flex-grow-1">
+                        <img src="{{ user.profile_picture.url }}" alt="Foto de {{ user.username }}">
+                        <div>
+                            <h6 class="fw-bold">{{ user.get_full_name|default:user.username }}</h6>
+                            <small>{% get_group user %}</small>
+                        </div>
+                    </a>
+                    <div class="text-end sidebar-settings">
+                        <a href="#" class="fs-5"><i class="bi bi-gear-fill me-3"></i></a>
+                    </div>
+                    {% else %}
+                        <a href="#login-modal" class="sidebar-user" data-bs-toggle="modal" data-bs-target="#login-modal" id="login-button">
+                            <i class="bi bi-box-arrow-right mx-3 fs-5"></i> Login
+                        </a>
+                    {% endif %}
+                </div>  
+                {% if user.is_authenticated %}
+                <ul class="list-unstyled m-0 ms-1 mt-2">
+                    <li class="mt-1">
+                        <form action="{% url 'base:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit" class="btn btn-danger rounded-pill w-100">
+                                <i class="bi bi-box-arrow-left me-1"></i> Sair
+                            </button>
+                        </form>
+                    </li>
+                </ul>
+                {% endif %}
+            </div>
+        </nav>
+    </div>
 </aside>
 {% endwith %}
