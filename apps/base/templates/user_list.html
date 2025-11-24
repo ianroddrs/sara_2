@@ -42,7 +42,7 @@
                     {% if u.id in online_user_ids %}
                         <span class="text-success fw-bold small">Online</span>
                     {% else %}
-                        <span class="text-muted small">Acessado {{ u.last_activity|humanize_last_activity }}</span>
+                        <span class="text-muted small">Acessado {{ u.last_activity|last_activity }}</span>
                     {% endif %}
                 </div>
             </div>

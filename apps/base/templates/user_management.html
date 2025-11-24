@@ -38,7 +38,7 @@
                                     {% if u.id in online_user_ids %}
                                         <div class="text-success small fw-bold" style="margin-top: 2px;">Online</div>
                                     {% else %}
-                                        <div class="text-muted small" style="margin-top: 2px;">Acessado {{ u.last_activity|humanize_last_activity }}</div>
+                                        <div class="text-muted small" style="margin-top: 2px;">Acessado {{ u.last_activity|last_activity }}</div>
                                     {% endif %}
                                 </div>
                             </div>

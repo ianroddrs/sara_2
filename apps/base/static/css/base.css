@@ -168,6 +168,19 @@ body {
     overflow-y: auto;
 }
 
+/* Estilo para o indicador de status online */
+.status-indicator {
+    position: absolute;
+    bottom: 0px;
+    right: 0px;
+    width: 12px;
+    height: 12px;
+    border-radius: 50%;
+    border: 2px solid white;
+}
+.status-online { background-color: #198754; } /* Bootstrap success */
+.status-offline { background-color: #adb5bd; } /* Bootstrap secondary */
+
 /* Estilo dos Cards */
 .card {
     border: none;
