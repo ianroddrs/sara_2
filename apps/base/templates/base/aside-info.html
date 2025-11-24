@@ -1,12 +1,13 @@
 {% if info_panel %}
 <aside class="sidebar offcanvas-lg offcanvas-end border-start" id="sidebarInfo" tabindex="-1" aria-labelledby="sidebarInfoLabel">
     <div class="offcanvas-header">
-        <h5 class="offcanvas-title" id="sidebarInfoLabel">{{title}}</h5>
-        <button type="button" class="btn-close" data-bs-dismiss="offcanvas" data-bs-target="#sidebarInfo" aria-label="Close"></button>
+        <button type="button" class="btn-close d-lg-none" data-bs-dismiss="offcanvas" data-bs-target="#sidebarInfo" aria-label="Close"></button>
     </div>
-    <div class="offcanvas-body flex-column">
-        <h4 class="d-none d-lg-block">{{title}}</h4>
-        <p>Conteúdo adicional.</p>
+    <div class="offcanvas-body flex-column p-3">
+        <h5 class="pb-3">Informações</h5>
+        <div class="bg-white rounded-4 p-4">
+            <p>Conteúdo adicional.</p>
+        </div>
     </div>
 </aside>
 {% endif %}
