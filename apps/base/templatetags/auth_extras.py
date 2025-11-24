@@ -38,8 +38,8 @@ def get_group(user):
     """
     return user.groups.first().name if user.groups.exists() else 'Sem Grupo'
 
-@register.filter(name='humanize_last_activity')
-def humanize_last_activity(last_activity_datetime):
+@register.filter(name='last_activity')
+def last_activity(last_activity_datetime):
     """
     Converte a data da última atividade em uma string legível.
     Ex: "há 5 minutos", "ontem", etc.
