@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% load auth_extras %}
 
 {% block title %}Gerenciamento de Usuários{% endblock %}
@@ -6,7 +6,7 @@
 {% block content %}
 <div class="main-header">
     <h1>Gerenciamento de Usuários</h1>
-    <a href="{% url 'core:user_create' %}" class="btn btn-dark">
+    <a href="{% url 'base:user_create' %}" class="btn btn-dark">
         <i class="fa-solid fa-plus me-2"></i> Novo Usuário
     </a>
 </div>
@@ -32,7 +32,7 @@
                                 <img src="{{ u.profile_picture.url }}" alt="Foto de {{ u.username }}" class="rounded-circle avatar-sm me-3 {% if not u.is_active %}opacity-50{% endif %}">
                                 <div>
                                     <h6 class="mb-0">
-                                        <a href="{% url 'core:user_profile' user.pk %}" class="text-dark text-decoration-none">{{ u.get_full_name|default:u.username }}</a>
+                                        <a href="{% url 'base:user_profile' user.pk %}" class="text-dark text-decoration-none">{{ u.get_full_name|default:u.username }}</a>
                                     </h6>
                                     <small class="text-muted">@{{ u.username }}</small>
                                     {% if u.id in online_user_ids %}
@@ -54,14 +54,14 @@
                         </td>
                         <td class="text-end">
                             {% if u|is_manageable_by:request.user %}
-                            <a href="{% url 'core:manage_user_access' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Gerenciar Acessos"><i class="fa-solid fa-key"></i></a>
+                            <a href="{% url 'base:manage_user_access' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Gerenciar Acessos"><i class="fa-solid fa-key"></i></a>
                                 {% if u != request.user %}
-                                    <a href="{% url 'core:user_edit' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="{% url 'core:admin_password_change' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Alterar Senha"><i class="fa-solid fa-lock"></i></a>
-                                    <a href="{% url 'core:user_delete' u.pk %}" class="btn btn-sm btn-outline-danger" title="Excluir"><i class="fa-solid fa-trash-alt"></i></a>
+                                    <a href="{% url 'base:user_edit' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="fa-solid fa-pencil"></i></a>
+                                    <a href="{% url 'base:admin_password_change' u.pk %}" class="btn btn-sm btn-outline-secondary" title="Alterar Senha"><i class="fa-solid fa-lock"></i></a>
+                                    <a href="{% url 'base:user_delete' u.pk %}" class="btn btn-sm btn-outline-danger" title="Excluir"><i class="fa-solid fa-trash-alt"></i></a>
                                 {% else %}
-                                    <a href="{% url 'core:self_profile_update' %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="fa-solid fa-pencil"></i></a>
-                                    <a href="{% url 'core:password_change' %}" class="btn btn-sm btn-outline-secondary" title="Alterar Senha"><i class="fa-solid fa-lock"></i></a>
+                                    <a href="{% url 'base:self_profile_update' %}" class="btn btn-sm btn-outline-secondary" title="Editar"><i class="fa-solid fa-pencil"></i></a>
+                                    <a href="{% url 'base:password_change' %}" class="btn btn-sm btn-outline-secondary" title="Alterar Senha"><i class="fa-solid fa-lock"></i></a>
                                 {% endif %}
                             {% else %}
                                 <span class="text-muted fst-italic">Sem permissão</span>

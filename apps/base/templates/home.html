@@ -1,16 +1,16 @@
 {% extends 'base/base.html' %}
+{% load auth_extras %}
 {% load static %}
 
 {% block static %}
 {% endblock %}
 
 {% block breadcrumb %}
-<nav class="ms-2" aria-label="breadcrumb">
+<nav class="ms-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
     <ol class="breadcrumb d-flex align-items-center m-0">
-        <li class="breadcrumb-item">
-            <a href="#" class="text-decoration-none"><div class="fw-medium fs-2 text-dark">Home</div></a>
-        </li>
-        <!-- <li class="breadcrumb-item active mt-1" aria-current="page">Boletim</li> -->
+        <li class="breadcrumb-item {{ app_name|is_active:'base' }} mt-1 fw-medium fs-5" aria-current="page">
+            Home
+        </li> 
     </ol>
 </nav>
 {% endblock %}

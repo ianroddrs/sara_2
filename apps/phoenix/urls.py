@@ -4,6 +4,6 @@ from . import views
 app_name = 'phoenix'
 
 urlpatterns = [
-    path('', views.home, name='phoenix'),
+    path('', views.home, name='home'),
     # Adicionaremos as URLs dos resultados da pesquisa aqui no futuro
 ]

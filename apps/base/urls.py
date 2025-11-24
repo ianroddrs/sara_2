@@ -22,7 +22,7 @@ app_name = 'base'
 urlpatterns = [
     # Autenticação
     path('api/login/', login_api, name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='base:login'), name='logout'),
+    path('logout/', auth_views.LogoutView.as_view(next_page='base:home'), name='logout'),
     
     # Tela Inicial
     path('', home, name='home'),
@@ -40,6 +40,7 @@ urlpatterns = [
     path('users/<int:pk>/', UserProfileView.as_view(), name='user_profile'),
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
     path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),
+    
     # NOVA URL PARA O TEMA
     path('set-theme/', set_user_theme, name='set_theme'),
     

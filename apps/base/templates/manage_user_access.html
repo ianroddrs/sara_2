@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 
 {% block title %}Gerenciar Acesso de {{ target_user.username }}{% endblock %}
 
@@ -37,7 +37,7 @@
             
             <hr>
             <div class="d-flex justify-content-end">
-                <a href="{% url 'core:user_management' %}" class="btn btn-light me-2">Cancelar</a>
+                <a href="{% url 'base:user_management' %}" class="btn btn-light me-2">Cancelar</a>
                 <button type="submit" class="btn btn-dark">Salvar Alterações</button>
             </div>
         </form>

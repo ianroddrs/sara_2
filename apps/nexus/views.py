@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
-# Create your views here.
+from apps.base.decorators import secure_module_access
 
+@secure_module_access
 def home(request):
-    return render(request, 'home.html')
+    return render(request, 'nexus.html')

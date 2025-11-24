@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 
 {% block title %}Confirmar Exclusão{% endblock %}
 
@@ -16,7 +16,7 @@
         <p class="text-danger">Esta ação não pode ser desfeita.</p>
         <form method="post" class="mt-4">
             {% csrf_token %}
-            <a href="{{ request.META.HTTP_REFERER|default:'core:user_management' }}" class="btn btn-light me-2">Cancelar</a>
+            <a href="{{ request.META.HTTP_REFERER|default:'base:user_management' }}" class="btn btn-light me-2">Cancelar</a>
             <button type="submit" class="btn btn-danger">Sim, Excluir Usuário</button>
         </form>
     </div>

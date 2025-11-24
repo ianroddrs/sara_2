@@ -3,6 +3,7 @@ from django.contrib.auth.views import LoginView as BaseLoginView, PasswordChange
 from django.contrib.auth.forms import PasswordChangeForm, AuthenticationForm
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
 from django.contrib.auth.decorators import login_required
+from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
@@ -25,62 +26,52 @@ from .utils import user_can_manage_other, get_online_user_ids
 CustomUser = get_user_model()
 
 def home(request):
-    return render(request, "home.html")
 
+    context = {
+        'info_panel':True
+    }
+    return render(request, "home.html", context)
+
+@require_http_methods(["POST"])
 def login_api(request):
-    if request.method == 'POST':
-        form = AuthenticationForm(request, data=request.POST)
-        if form.is_valid():
-            user = form.get_user()
-
-            if hasattr(user, 'allowed_ip_address') and user.allowed_ip_address:
-                x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
-                request_ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
-
-                if user.allowed_ip_address != request_ip:
-                    messages.error(request, "Acesso negado. Você está tentando acessar de um endereço de IP não autorizado.")
-                    return redirect(reverse('base:home'))
-            
-            auth_login(request, user)
-
-            next_url = request.POST.get('next') or reverse('base:home')
-            messages.success(request, "Login realizado com sucesso!")
-            
-            return redirect(next_url)
-        else:
-            messages.error(request, "Acesso negado. Usuário ou senha incorreto.")
-            return redirect(reverse('base:home'))
-    else:
-        messages.error(request, "")
-        return redirect(reverse('base:home'))
-        
-
-class CustomLoginView(BaseLoginView):
-    template_name = 'home.html'
-
-    def form_valid(self, form):
+    # Instancia o formulário com os dados do POST
+    form = AuthenticationForm(request, data=request.POST)
+    
+    if form.is_valid():
         user = form.get_user()
-        
-        if user.allowed_ip_address:
-            x_forwarded_for = self.request.META.get('HTTP_X_FORWARDED_FOR')
-            if x_forwarded_for:
-                request_ip = x_forwarded_for.split(',')[0]
-            else:
-                request_ip = self.request.META.get('REMOTE_ADDR')
+
+        # Verificação de IP (Lógica mantida)
+        if hasattr(user, 'allowed_ip_address') and user.allowed_ip_address:
+            x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
+            request_ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
             if user.allowed_ip_address != request_ip:
-                messages.error(self.request, "Acesso negado. Você está tentando acessar de um endereço de IP não autorizado.")
-                return self.form_invalid(form)
+                # Retorna erro 403 (Forbidden) em JSON
+                return JsonResponse(
+                    {"message": "Acesso negado. Endereço de IP não autorizado."}, 
+                    status=403
+                )
         
-        login(self.request, user)
-        return redirect(self.get_success_url())
+        # Realiza o login
+        auth_login(request, user)
 
-    def form_invalid(self, form):
-        """
-        Adiciona uma mensagem de erro explícita para ser exibida no template.
-        """
-        messages.error(self.request, "Usuário ou senha inválidos. Por favor, tente novamente.")
-        return super().form_invalid(form)
+        # Define a URL de destino
+        next_url = request.POST.get('next') or reverse('base:home')
+        
+        # Retorna sucesso 200 com a URL para o JS redirecionar
+        return JsonResponse({
+            "message": "Login realizado com sucesso!", 
+            "redirect_url": next_url
+        }, status=200)
+
+    else:
+        # Retorna erro 401 (Unauthorized) com mensagem genérica ou específica
+        # Você pode pegar form.errors para ser mais específico se quiser
+        return JsonResponse(
+            {"message": "Acesso negado. Usuário ou senha incorreto."}, 
+            status=401
+        )
+        
 
 # --- Mixins de Permissão Hierárquica ---
 class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -89,7 +80,7 @@ class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
     def handle_no_permission(self):
         messages.error(self.request, "Você não tem permissão para acessar esta página.")
-        return redirect('core:user_list')
+        return redirect('base:user_list')
 
 # --- Views de Gerenciamento de Usuários ---
 
@@ -117,7 +108,7 @@ class UserCreateView(ManagerialRoleRequiredMixin, CreateView):
     model = CustomUser
     form_class = CustomUserCreationForm
     template_name = 'profile_form.html'
-    success_url = reverse_lazy('core:user_management')
+    success_url = reverse_lazy('base:user_management')
 
     def get_form_kwargs(self):
         kwargs = super().get_form_kwargs()
@@ -132,7 +123,7 @@ class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
     model = CustomUser
     form_class = AdminUserUpdateForm
     template_name = 'profile_form.html'
-    success_url = reverse_lazy('core:user_management')
+    success_url = reverse_lazy('base:user_management')
     
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -152,7 +143,7 @@ class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
 class UserDeleteView(ManagerialRoleRequiredMixin, DeleteView):
     model = CustomUser
     template_name = 'user_confirm_delete.html'
-    success_url = reverse_lazy('core:user_management')
+    success_url = reverse_lazy('base:user_management')
 
     def get_object(self, queryset=None):
         obj = super().get_object(queryset)
@@ -214,7 +205,7 @@ def self_profile_update_view(request):
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm
     template_name = 'password_change_form.html'
-    success_url = reverse_lazy('core:user_list')
+    success_url = reverse_lazy('base:user_list')
 
     def form_valid(self, form):
         messages.success(self.request, "Sua senha foi alterada com sucesso!")
@@ -227,13 +218,13 @@ def manage_user_access_view(request, pk):
 
     if not user_can_manage_other(request.user, target_user):
         messages.error(request, "Você não tem permissão para gerenciar os acessos deste usuário.")
-        return redirect('core:user_management')
+        return redirect('base:user_management')
     
     if request.method == 'POST':
         module_ids = request.POST.getlist('modules')
         target_user.modules.set(module_ids)
         messages.success(request, f"Acessos do usuário {target_user.username} atualizados.")
-        return redirect('core:user_management')
+        return redirect('base:user_management')
 
     applications = Application.objects.prefetch_related('modules').all()
     user_module_ids = set(target_user.modules.values_list('id', flat=True))
@@ -251,14 +242,14 @@ def user_password_change_view(request, pk):
 
     if not user_can_manage_other(request.user, target_user):
         messages.error(request, "Você não tem permissão para alterar a senha deste usuário.")
-        return redirect('core:user_management')
+        return redirect('base:user_management')
 
     if request.method == 'POST':
         form = AdminPasswordChangeForm(target_user, request.POST)
         if form.is_valid():
             form.save()
             messages.success(request, f"A senha de {target_user.username} foi alterada com sucesso.")
-            return redirect('core:user_management')
+            return redirect('base:user_management')
     else:
         form = AdminPasswordChangeForm(target_user)
 

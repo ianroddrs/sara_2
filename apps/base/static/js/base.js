@@ -7,6 +7,7 @@ class App {
         this.formularioLogin = document.getElementById('login-form')
 
         this.formularioLogin.addEventListener('submit', async (event) => {this.login(event)})
+        
         window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
     }
 
@@ -74,7 +75,7 @@ class App {
     }
 
 
-    login(event){
+async login(event){
         event.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
         const formulario = new FormData(this.formularioLogin);
@@ -83,7 +84,24 @@ class App {
             formulario.append('next', urlParams.get('next'))
         }
 
-        this.request('/api/login/', 'POST', formulario)
+        try {
+            // Armazena a resposta da requisição
+            const response = await this.request('/api/login/', 'POST', formulario);
+            
+            // Se chegou aqui, deu sucesso (status 200)
+            // Exibe mensagem de sucesso (opcional, pois vai redirecionar rápido)
+            this.showAlert(response.message, 'success');
+
+            // Redireciona o usuário para a página correta
+            if (response.redirect_url) {
+                window.location.href = response.redirect_url;
+            }
+        } catch (error) {
+            // O catch já é tratado dentro do this.request, 
+            // mas como this.request engole o erro e mostra o alert, 
+            // aqui só precisamos garantir que o fluxo segue.
+            console.error("Falha no login", error);
+        }
     }
 }
 

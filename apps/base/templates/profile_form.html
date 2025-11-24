@@ -1,4 +1,4 @@
-{% extends "base.html" %}
+{% extends "base/base.html" %}
 {% load auth_extras %}
 
 {% block title %}
@@ -72,7 +72,7 @@
                 {% if request.META.HTTP_REFERER %}
                     <a href="{{ request.META.HTTP_REFERER }}" class="btn btn-light me-2">Cancelar</a>
                 {% else %}
-                    <a href="{% url 'core:user_management' %}" class="btn btn-light me-2">Cancelar</a>
+                    <a href="{% url 'base:user_management' %}" class="btn btn-light me-2">Cancelar</a>
                 {% endif %}
                 <button type="submit" class="btn btn-dark">Salvar Alterações</button>
             </div>
