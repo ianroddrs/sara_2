@@ -26,12 +26,14 @@ from .utils import user_can_manage_other
 CustomUser = get_user_model()
 
 def home(request):
-
     users = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
+    # Busca todas as aplicações cadastradas
+    applications = Application.objects.all() 
 
     context = {
-        'users':users,
-        'info_panel':True
+        'users': users,
+        'applications': applications, # Passa para o template
+        'info_panel': True
     }
     
     return render(request, "home.html", context)

@@ -20,7 +20,7 @@
                 {% if profile_user.id in online_user_ids %}
                     <p class="mb-2"><span class="text-success fw-bold">Online</span></p>
                 {% else %}
-                    <p class="mb-2"><span class="text-muted">Acessado {{ profile_user.last_activity|humanize_last_activity }}</span></p>
+                    <p class="mb-2"><span class="text-muted">Acessado {{ profile_user.last_activity|last_activity }}</span></p>
                 {% endif %}
 
                 <p class="mb-4"><span class="badge bg-primary fw-normal fs-6">{% get_group profile_user %}</span></p>
