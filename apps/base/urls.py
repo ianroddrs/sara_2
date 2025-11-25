@@ -5,6 +5,7 @@ from .views import (
     home,
     login_api,
     settings,
+    user_profile,
     UserManagementView,
     UserListView,
     UserProfileView,
@@ -41,8 +42,7 @@ urlpatterns = [
     path('management/users/delete/<int:pk>/', UserDeleteView.as_view(), name='user_delete'),
     
     # Perfil e Listas Públicas
-    path('users/', UserListView.as_view(), name='user_list'), # Home page
-    path('users/<int:pk>/', UserProfileView.as_view(), name='user_profile'),
+    path('<str:username>', user_profile, name='user_profile'),
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
     path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),
     

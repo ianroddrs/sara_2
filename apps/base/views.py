@@ -22,6 +22,7 @@ from .forms import (
     AdminPasswordChangeForm
 )
 from .utils import user_can_manage_other
+from .decorators import secure_module_access
 
 CustomUser = get_user_model()
 
@@ -38,7 +39,8 @@ def home(request):
     
     return render(request, "home.html", context)
 
-@require_http_methods(["POST"])
+
+@require_POST
 def login_api(request):
     # Instancia o formulário com os dados do POST
     form = AuthenticationForm(request, data=request.POST)
@@ -77,10 +79,18 @@ def login_api(request):
             {"message": "Acesso negado. Usuário ou senha incorreto."}, 
             status=401
         )
-        
+
+
 def settings(request):
     context = {}
     return render(request, 'base/settings.html', context)
+
+
+@secure_module_access
+def user_profile(request, username):
+    usuario = get_object_or_404(CustomUser, username=username)
+    context={'profile_user':usuario}
+    return render(request, 'user_profile.html', context)
 
 # --- Mixins de Permissão Hierárquica ---
 class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):

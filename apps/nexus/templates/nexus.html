@@ -5,16 +5,9 @@
 {% block title %}Nexus{% endblock %}
 
 {% block breadcrumb %}
-<nav class="ms-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb d-flex align-items-center m-0">
-        <li class="breadcrumb-item mt-1">
-            <a href="{% url 'base:home' %}" class="text-decoration-none fw-medium fs-5">Home</a>
-        </li>
-        <li class="breadcrumb-item {{ app_name|is_active:'nexus' }} mt-1 fw-medium" aria-current="page">
-            Nexus
-        </li> 
-    </ol>
-</nav>
+    <li class="breadcrumb-item {{ app_name|is_active:'base' }} mt-1 fw-medium fs-5" aria-current="page">
+        Nexus
+    </li> 
 {% endblock %}
 
 {% block content %}

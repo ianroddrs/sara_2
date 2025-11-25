@@ -3,16 +3,10 @@
 {% load static %}
 
 {% block breadcrumb %}
-<nav class="ms-2" style="--bs-breadcrumb-divider: '>';" aria-label="breadcrumb">
-    <ol class="breadcrumb d-flex align-items-center m-0">
-        <li class="breadcrumb-item {{ app_name|is_active:'base' }} mt-1 fw-medium fs-5" aria-current="page">
-            Home
-        </li> 
-    </ol>
-</nav>
+    <li class="breadcrumb-item {{ app_name|is_active:'base' }} mt-1 fw-medium fs-5" aria-current="page">
+        Home
+    </li>
 {% endblock %}
-
-{% block info_title %}Usuários ({% if users %}{{ users.count }}{% else %}0{% endif %}){% endblock %}
 
 {% block info_sidebar_content %}
 <div class="d-flex flex-column h-100">
@@ -141,7 +135,7 @@
 <div class="container-fluid py-2">
     
     <div class="mb-4 border-bottom pb-2">
-        <h1 class="h3 text-dark fw-bold">Bem-vindos ao SARA</h1>
+        <h1 class="h3 text-dark fw-bold">Bem-vindo ao SARA</h1>
         <p class="text-muted small">Visão geral e gerenciamento do sistema.</p>
     </div>
 
