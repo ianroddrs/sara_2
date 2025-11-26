@@ -2,12 +2,6 @@
 {% load auth_extras %}
 {% load static %}
 
-{% block breadcrumb %}
-    <li class="breadcrumb-item {{ app_name|is_active:'base' }} mt-1 fw-medium fs-5" aria-current="page">
-        Home
-    </li>
-{% endblock %}
-
 {% block info_sidebar_content %}
 <div class="d-flex flex-column h-100">
     <h5 class="fw-bold p-3 d-none d-lg-block" id="sidebarInfoLabel">

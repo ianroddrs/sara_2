@@ -77,3 +77,24 @@ def is_online(user):
             user_ids.add(int(user_id))
     
     return True if id in user_ids else False
+
+@register.inclusion_tag('base/breadcrumbs.html', takes_context=True)
+def create_breadcrumbs(context):
+    request = context['request']
+    path = request.path
+
+    path_components = [p for p in path.strip('/').split('/') if p]
+    
+    breadcrumbs = []
+    url = ''
+    
+    for i, component in enumerate(path_components):
+        url += f'/{component}'
+        is_active = (i == len(path_components) - 1)
+        name = component.replace('-', ' ').replace('_', ' ').title()
+        breadcrumbs.append({
+            'name': name,
+            'url': url,
+            'is_active': is_active
+        })        
+    return {'breadcrumbs': breadcrumbs}

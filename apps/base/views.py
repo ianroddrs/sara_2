@@ -34,7 +34,7 @@ def home(request):
     context = {
         'users': users,
         'applications': applications, # Passa para o template
-        'info_panel': True
+        # 'info_panel': True
     }
     
     return render(request, "home.html", context)
@@ -121,7 +121,7 @@ class UserManagementView(ManagerialRoleRequiredMixin, ListView):
 class UserCreateView(ManagerialRoleRequiredMixin, CreateView):
     model = CustomUser
     form_class = CustomUserCreationForm
-    template_name = 'profile_form.html'
+    template_name = 'settings/profile_form.html'
     success_url = reverse_lazy('base:user_management')
 
     def get_form_kwargs(self):
@@ -136,7 +136,7 @@ class UserCreateView(ManagerialRoleRequiredMixin, CreateView):
 class UserUpdateView(ManagerialRoleRequiredMixin, UpdateView):
     model = CustomUser
     form_class = AdminUserUpdateForm
-    template_name = 'profile_form.html'
+    template_name = 'settings/profile_form.html'
     success_url = reverse_lazy('base:user_management')
     
     def get_object(self, queryset=None):
@@ -204,11 +204,11 @@ def self_profile_update_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Seu perfil foi atualizado com sucesso!')
-            return redirect('base:user_profile', pk=request.user.pk)
+            return redirect('base:user_profile', username=request.user.username)
     else:
         form = CustomUserChangeForm(instance=request.user)
     
-    return render(request, 'profile_form.html', {'form': form})
+    return render(request, 'settings/profile_form.html', {'form': form})
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm

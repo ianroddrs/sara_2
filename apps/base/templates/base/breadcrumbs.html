@@ -1,0 +1,25 @@
+<nav class="ms-2" style="--bs-breadcrumb-divider: '›';" aria-label="breadcrumb">
+    <ol class="breadcrumb m-0">
+        <li class="breadcrumb-item mt-1">
+            <a href="{% url 'base:home' %}" class="text-decoration-none fw-medium fs-5 text-primary">
+                <i class="bi bi-house-door-fill"></i>
+            </a>
+        </li>
+        {% for crumb in breadcrumbs %}
+            
+            {% if crumb.is_active %}
+                <li class="breadcrumb-item mt-1 fw-medium fs-5 text-capitalize text-dark active" aria-current="page">
+                    {{ crumb.name }}
+                </li>
+            
+            {% else %}
+                <li class="breadcrumb-item mt-1">
+                    <a href="{{ crumb.url }}" class="text-decoration-none fw-medium fs-5 text-muted">
+                        {{ crumb.name }}
+                    </a>
+                </li>
+            {% endif %}
+
+        {% endfor %}
+    </ol>
+</nav>

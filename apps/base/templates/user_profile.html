@@ -1,15 +1,6 @@
 {% extends "base/base.html" %}
 {% load auth_extras %}
 
-{% block breadcrumb %}
-    <li class="breadcrumb-item mt-1">
-        <a href="{% url 'base:home' %}" class="text-decoration-none fw-medium fs-5 text-muted">Home</a>
-    </li>
-    <li class="breadcrumb-item {{ app_name|is_active:'base' }} mt-1 fw-medium fs-5 text-capitalize" aria-current="page">
-        {{user.username}}
-    </li>
-{% endblock %}
-
 {% block content %}
 <div class="main-header">
     <h1>Perfil de Usuário</h1>

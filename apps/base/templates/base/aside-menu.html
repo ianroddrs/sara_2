@@ -9,51 +9,80 @@
         </a>
 
         <nav class="sidebar-nav flex-grow-1">
-            <ul class="nav flex-column ">
-                <li class="nav-item">
-                    <a href="{% url 'base:home' %}"
-                        class="nav-link {{ app_name|is_active:'base' }}">
-                        <i class="bi bi-house-door-fill"></i>Home
-                    </a>
-                </li>
-                <li class="nav-item">
-                    <div class="btn-group dropdown w-100">
-                        <a href="{% url 'phoenix:home' %}"
-                            class="nav-link {{ app_name|is_active:'phoenix' }} w-100">
-                            <i class="bi bi-fire"></i>Phoenix
+            <div>
+                <h6 class="text-primary px-3">Aplicações</h6>
+                <ul class="nav flex-column ">
+                    <li class="nav-item">
+                        <a href="{% url 'base:home' %}"
+                            class="nav-link {{ app_name|is_active:'base' }}">
+                            <i class="bi bi-house-door-fill"></i>Home
                         </a>
-                        <button 
-                            class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
-                            type="button" data-bs-toggle="collapse" data-bs-target="#phoenix-collapse" 
-                            aria-expanded="false" aria-controls="phoenix-collapse"></button>
-                    </div>
-                    <nav  class="collapse nav flex-column" id="phoenix-collapse">
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Boletim</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-inboxes"></i>Procedimento</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-blockquote-left"></i>Relato</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-person-standing"></i>Pessoa</a>
-                    </nav >
-                </li>
-                <li class="nav-item">
-                    <div class="btn-group dropdown w-100">
-                        <a href="{% url 'nexus:nexus' %}"
-                            class="nav-link {{ app_name|is_active:'nexus' }} w-100">
-                            <i class="bi bi-bezier2"></i>Nexus
+                    </li>
+                    <li class="nav-item">
+                        <div class="btn-group dropdown w-100">
+                            <a href="{% url 'phoenix:home' %}"
+                                class="nav-link {{ app_name|is_active:'phoenix' }} w-100">
+                                <i class="bi bi-fire"></i>Phoenix
+                            </a>
+                            <button 
+                                class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
+                                type="button" data-bs-toggle="collapse" data-bs-target="#phoenix-collapse" 
+                                aria-expanded="false" aria-controls="phoenix-collapse"></button>
+                        </div>
+                        <nav  class="collapse nav flex-column" id="phoenix-collapse">
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Boletim</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-inboxes"></i>Procedimento</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-blockquote-left"></i>Relato</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-person-standing"></i>Pessoa</a>
+                        </nav >
+                    </li>
+                    <li class="nav-item">
+                        <div class="btn-group dropdown w-100">
+                            <a href="{% url 'nexus:nexus' %}"
+                                class="nav-link {{ app_name|is_active:'nexus' }} w-100">
+                                <i class="bi bi-bezier2"></i>Nexus
+                            </a>
+                            <button 
+                                class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
+                                type="button" data-bs-toggle="collapse" data-bs-target="#nexus-collapse" 
+                                aria-expanded="false" aria-controls="nexus-collapse"></button>
+                        </div>
+                        <nav  class="collapse nav flex-column" id="nexus-collapse">
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-symmetry-vertical"></i>Duplicados</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-journal-medical"></i>DataSUS</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-badge-cc"></i>CaoCriminal</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Aditamento</a>
+                            <a class="nav-link sub-link" href="#"><i class="bi bi-search"></i>Consultor</a>
+                        </nav >
+                    </li>
+                </ul>
+            </div>
+            
+            
+            <div class="mt-4">
+                <h6 class="text-primary px-3">Geral</h6>
+                <ul class="nav flex-column ">
+                    <li class="nav-item">
+                        <a href=""
+                            class="nav-link">
+                            <i class="bi bi-people-fill"></i>Usuários
                         </a>
-                        <button 
-                            class="btn text-white border-0 rounded-0 dropdown-toggle dropdown-toggle-split collapsed"  
-                            type="button" data-bs-toggle="collapse" data-bs-target="#nexus-collapse" 
-                            aria-expanded="false" aria-controls="nexus-collapse"></button>
-                    </div>
-                    <nav  class="collapse nav flex-column" id="nexus-collapse">
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-symmetry-vertical"></i>Duplicados</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-journal-medical"></i>DataSUS</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-badge-cc"></i>CaoCriminal</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-file-earmark-text"></i>Aditamento</a>
-                        <a class="nav-link sub-link" href="#"><i class="bi bi-search"></i>Consultor</a>
-                    </nav >
-                </li>
-            </ul>
+                    </li>
+                    <li class="nav-item">
+                        <a href=""
+                            class="nav-link">
+                            <i class="bi bi-shield-fill-check"></i>Segurança e Acesso
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a href=""
+                            class="nav-link">
+                            <i class="bi bi-sliders2"></i>Configurações
+                        </a>
+                    </li>
+                </ul>
+            </div>
+
         </nav>
 
         <hr class="mt-3 mb-0 text-light">
