@@ -1,0 +1,145 @@
+{% load static %}
+{% load auth_extras %}
+
+<div class="modal fade" id="profile-modal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content shadow border-0">
+            
+            <form method="POST" action="{% url 'base:user_edit' user.pk %}" enctype="multipart/form-data">
+                {% csrf_token %}
+                
+                <div class="modal-header border-0 pb-0 pt-3 px-3 bg-white rounded-top"></div>
+
+                <div class="modal-body p-3 pt-0">
+                    
+                    <div class="d-flex flex-wrap align-items-center mb-4 mt-2 gap-3">
+                        <div class="position-relative">
+                            <img id="header-avatar"
+                                 src="{{ user.profile_picture.url }}" 
+                                 alt="{{ user.username }}" 
+                                 class="rounded-circle border" 
+                                 style="width: 64px; height: 64px; object-fit: cover;">
+                            {% if user|is_online %}
+                                <span class="position-absolute bottom-0 status-online border border-3 border-white rounded-circle" style="right: 6px; padding: 6px;"></span>
+                            {% endif %}
+                        </div>
+                        
+                        <div class="flex-grow-1" style="min-width: 150px;">
+                            <h5 class="mb-1 fw-bold text-dark">{{ user.get_full_name|default:user.username }}</h5>
+                            <p class="text-muted mb-0 small">{{ user.email|default:"email@naoinformado.com" }}</p>
+                        </div>
+
+                        <div class="d-flex gap-2 ms-auto">
+                            <button type="button" class="btn btn-sm btn-outline-light border text-dark">
+                                Alterar senha
+                            </button>
+                            <a href="{% url 'base:self_profile_update' %}" class="btn btn-sm btn-outline-light border text-dark">
+                                <i class="bi bi-gear"></i>
+                            </a>
+                        </div>
+                    </div>
+
+                    <hr class="text-muted opacity-25 mb-3">
+
+                    <div class="d-flex flex-column gap-3">
+
+                        <div class="row align-items-center g-2">
+                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">Nome</label>
+                            <div class="col-sm-9">
+                                <div class="row g-2">
+                                    <div class="col-6">
+                                        <input type="text" name="first_name" class="form-control form-control-sm text-dark" value="{{ user.first_name }}" placeholder="Nome">
+                                    </div>
+                                    <div class="col-6">
+                                        <input type="text" name="last_name" class="form-control form-control-sm text-dark" value="{{ user.last_name }}" placeholder="Sobrenome">
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center g-2">
+                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">Email</label>
+                            <div class="col-sm-9">
+                                <div class="input-group input-group-sm">
+                                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                    <input type="email" name="email" class="form-control border-start-0 ps-0" value="{{ user.email }}">
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="row align-items-center g-2">
+                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">IP Acesso</label>
+                            <div class="col-sm-9">
+                                <input type="text" disabled class="form-control form-control-sm" value="{{ user.allowed_ip_address|default:'' }}" placeholder="Qualquer IP">
+                            </div>
+                        </div>
+
+                        <hr class="text-muted opacity-25 mb-3">
+
+                        <div class="row align-items-start g-2">
+                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">
+                                Foto
+                            </label>
+                            <div class="col-sm-9">
+
+                                <div class="d-flex align-items-start">
+                                    <img id="input-avatar" 
+                                            src="{{ user.profile_picture.url }}" 
+                                            class="rounded-circle border-4 border" 
+                                            width="65" height="65" 
+                                            style="object-fit: cover;">
+
+                                    <label for="avatar-upload" class="btn btn-sm ms-3 mt-1 btn-outline-light border text-dark rounded-3 position-relative">
+                                        Alterar Foto
+                                    </label>
+                                    <input type="file" 
+                                            name="profile_picture" 
+                                            id="avatar-upload"
+                                            class="d-none" 
+                                            accept="image/*"> 
+                                </div>
+             
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+
+                <div class="modal-footer justify-content-between border-top p-3 bg-light rounded-bottom">
+                    {% if user|is_manageable_by:request.user and request.user != user %}
+                        <a href="{% url 'base:user_delete' user.pk %}" class="btn btn-outline-danger border-0 btn-sm fw-semibold px-0"><i class="bi bi-trash me-1"></i>Excluir</a>
+                    {% else %}
+                        <div></div>
+                    {% endif %}
+                    <div class="d-flex gap-2">
+                        <button type="button" class="btn btn-white border text-dark bg-white fw-semibold btn-sm px-3" data-bs-dismiss="modal">Cancelar</button>
+                        <button type="submit" class="btn btn-dark fw-semibold btn-sm px-3">Salvar</button>
+                    </div>
+                </div>
+
+            </form>
+        </div>
+    </div>
+</div>
+
+<script>
+    document.getElementById('avatar-upload').addEventListener('change', function(event) {
+        const file = event.target.files[0];
+        if (file) {
+            const reader = new FileReader();
+            
+            reader.onload = function(e) {
+                // Atualiza a imagem pequena ao lado do input
+                const inputAvatar = document.getElementById('input-avatar');
+                if (inputAvatar) inputAvatar.src = e.target.result;
+                
+                // Atualiza a imagem grande no cabeçalho do modal
+                const headerAvatar = document.getElementById('header-avatar');
+                if (headerAvatar) headerAvatar.src = e.target.result;
+            }
+            
+            reader.readAsDataURL(file);
+        }
+    });
+</script>

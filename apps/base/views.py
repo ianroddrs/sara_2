@@ -99,7 +99,7 @@ class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
 
     def handle_no_permission(self):
         messages.error(self.request, "Você não tem permissão para acessar esta página.")
-        return redirect('base:user_list')
+        return redirect('base:home')
 
 # --- Views de Gerenciamento de Usuários ---
 
@@ -212,8 +212,8 @@ def self_profile_update_view(request):
 
 class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
     form_class = CustomPasswordChangeForm
-    template_name = 'password_change_form.html'
-    success_url = reverse_lazy('base:user_list')
+    template_name = 'settings/password_change_form.html'
+    success_url = reverse_lazy('base:home')
 
     def form_valid(self, form):
         messages.success(self.request, "Sua senha foi alterada com sucesso!")

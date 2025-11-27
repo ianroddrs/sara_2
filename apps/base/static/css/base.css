@@ -2,9 +2,6 @@
     /* Paleta de cores personalizada para o Bootstrap */
     --bs-primary: #4A90E2;
     --bs-primary-rgb: 74, 144, 226;
-    --bs-secondary: #50E3C2;
-    --bs-secondary-rgb: 80, 227, 194;
-    --bs-info-bg: #f9f9f9; /* Fundo geral mais suave */
     --bs-body-font-family: 'Poppins', sans-serif;
 }
 
@@ -178,23 +175,5 @@ body {
     border-radius: 50%;
     border: 2px solid white;
 }
-.status-online { background-color: #198754; } /* Bootstrap success */
+.status-online { background-color: #12d448; } /* Bootstrap success */
 .status-offline { background-color: #adb5bd; } /* Bootstrap secondary */
-
-/* Estilo dos Cards */
-.card {
-    border: none;
-    border-radius: 0.75rem; /* Bordas mais arredondadas */
-    box-shadow: 0 4px 12px rgba(0,0,0,0.05);
-    transition: transform 0.2s ease-in-out;
-}
-
-.card:hover {
-    transform: translateY(-5px);
-}
-
-.card-header {
-    background-color: #fff;
-    border-bottom: 1px solid #e9ecef;
-    font-weight: 600;
-}

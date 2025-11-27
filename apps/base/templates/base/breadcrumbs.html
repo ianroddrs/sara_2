@@ -9,12 +9,14 @@
             
             {% if crumb.is_active %}
                 <li class="breadcrumb-item mt-1 fw-medium fs-5 text-capitalize text-dark active" aria-current="page">
-                    {{ crumb.name }}
+                    <span class="breadcrumb-item mt-1 fw-medium fs-5 text-capitalize text-dark active">
+                        {{ crumb.name }}
+                    </span>
                 </li>
             
             {% else %}
-                <li class="breadcrumb-item mt-1">
-                    <a href="{{ crumb.url }}" class="text-decoration-none fw-medium fs-5 text-muted">
+                <li class="breadcrumb-item mt-1 fw-medium fs-5 text-capitalize text-muted">
+                    <a href="{{ crumb.url }}" class="text-decoration-none">
                         {{ crumb.name }}
                     </a>
                 </li>
