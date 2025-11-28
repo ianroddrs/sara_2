@@ -1,14 +1,14 @@
 from functools import wraps
 from urllib.parse import urlparse, parse_qs, urlencode, urlunparse
 from django.shortcuts import redirect
+from django.urls import reverse
 from django.contrib import messages
 from django.utils.safestring import mark_safe
-from django.urls import reverse
 
 def secure_module_access(view_func):
     """
     Decorador unificado que gerencia autenticação e permissão.
-    Substitui o parâmetro 'next' se ele já existir na URL de destino.
+    Previne loops de redirecionamento verificando o HTTP_REFERER.
     """
     @wraps(view_func)
     def _wrapped_view(request, *args, **kwargs):
@@ -22,12 +22,38 @@ def secure_module_access(view_func):
             
             login_link = '<a href="#login-modal" data-bs-toggle="modal" data-bs-target="#login-modal"><strong class="text-primary text-decoration-none">autenticação</strong></a>'
             message_text = f"<strong>Acesso restrito</strong>. Faça {login_link} para acessar a aplicação <strong>{app_namespace.upper()}</strong>."
-            messages.error(request, mark_safe(message_text))
             
-            current_url = request.get_full_path()
-            target_url = request.META.get('HTTP_REFERER') or reverse('home')
+            # Adiciona a mensagem apenas se ela já não estiver lá (evita spam de mensagens no loop/refresh)
+            # Opcional, mas recomendado
+            storage = messages.get_messages(request)
+            if not any(msg.message == message_text for msg in storage):
+                 messages.error(request, mark_safe(message_text))
             
+            # --- Lógica de Correção do Loop ---
+            referer = request.META.get('HTTP_REFERER')
+            home_url = reverse('base:home') # Certifique-se que 'base:home' existe, ou use apenas 'home'
+            
+            if referer:
+                # Extrai apenas o caminho (path) do referer para comparar, ignorando domínio e query string
+                try:
+                    referer_path = urlparse(referer).path
+                except ValueError:
+                    referer_path = None
+                
+                # SE o lugar de onde vim (referer) É o mesmo lugar onde estou (request.path)
+                # ENTÃO jogue para a home, senão teremos loop infinito.
+                if referer_path == request.path:
+                    target_url = home_url
+                else:
+                    target_url = referer
+            else:
+                target_url = home_url
+            
+            # ----------------------------------
 
+            current_url = request.get_full_path()
+            
+            # Montagem da URL com o parametro 'next'
             parsed = urlparse(target_url)
             query_params = parse_qs(parsed.query)
             
@@ -68,7 +94,7 @@ def secure_module_access(view_func):
             return view_func(request, *args, **kwargs)
         
         # ---------------------------------------------------------
-        # 4. Acesso Negado
+        # 4. Acesso Negado (Logado, mas sem permissão)
         # ---------------------------------------------------------
         messages.error(request, "Você não tem permissão para acessar esta funcionalidade.")
         return redirect('base:home')

@@ -1,11 +1,12 @@
 {% load static %}
 {% load auth_extras %}
 
+{% if user.is_authenticated %}
 <div class="modal fade" id="profile-modal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow border-0">
             
-            <form method="POST" action="{% url 'base:user_edit' user.pk %}" enctype="multipart/form-data">
+            <form method="POST" action="" enctype="multipart/form-data">
                 {% csrf_token %}
                 
                 <div class="modal-header border-0 pb-0 pt-3 px-3 bg-white rounded-top"></div>
@@ -143,3 +144,5 @@
         }
     });
 </script>
+
+{% endif %}

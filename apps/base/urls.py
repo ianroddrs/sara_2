@@ -2,8 +2,9 @@
 from django.urls import path
 from django.contrib.auth import views as auth_views
 from .views import (
+    login_view,
+    logout_view,
     home,
-    login_api,
     settings,
     user_profile,
     UserManagementView,
@@ -23,8 +24,8 @@ app_name = 'base'
 
 urlpatterns = [
     # Autenticação
-    path('api/login/', login_api, name='login'),
-    path('logout/', auth_views.LogoutView.as_view(next_page='base:home'), name='logout'),
+    path('login', login_view, name='login'),
+    path('logout', logout_view, name='logout'),
     
     # Tela Inicial
     path('', home, name='home'),

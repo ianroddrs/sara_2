@@ -7,8 +7,7 @@ from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView, DetailView, UpdateView, CreateView, DeleteView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy, reverse
-from django.contrib import messages
-from django.contrib.auth import login as auth_login, get_user_model, update_session_auth_hash, authenticate
+from django.contrib.auth import login, logout, get_user_model, update_session_auth_hash, authenticate
 from django.contrib.auth.models import Group
 from .models import Application
 from django.http import JsonResponse
@@ -26,23 +25,8 @@ from .decorators import secure_module_access
 
 CustomUser = get_user_model()
 
-def home(request):
-    users = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
-    # Busca todas as aplicações cadastradas
-    applications = Application.objects.all() 
-
-    context = {
-        'users': users,
-        'applications': applications, # Passa para o template
-        # 'info_panel': True
-    }
-    
-    return render(request, "home.html", context)
-
-
 @require_POST
-def login_api(request):
-    # Instancia o formulário com os dados do POST
+def login_view(request):
     form = AuthenticationForm(request, data=request.POST)
     
     if form.is_valid():
@@ -54,19 +38,14 @@ def login_api(request):
             request_ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
             if user.allowed_ip_address != request_ip:
-                # Retorna erro 403 (Forbidden) em JSON
                 return JsonResponse(
                     {"message": "Acesso negado. Endereço de IP não autorizado."}, 
                     status=403
                 )
         
-        # Realiza o login
-        auth_login(request, user)
-
-        # Define a URL de destino
+        login(request, user)
         next_url = request.POST.get('next') or reverse('base:home')
         
-        # Retorna sucesso 200 com a URL para o JS redirecionar
         return JsonResponse({
             "message": "Login realizado com sucesso!", 
             "redirect_url": next_url
@@ -80,6 +59,31 @@ def login_api(request):
             status=401
         )
 
+@require_POST
+def logout_view(request):
+    if request.user.is_authenticated:
+        logout(request)
+        return JsonResponse({
+            'success': True, 
+            'message': 'Logout realizado com sucesso.'
+        }, status=200)
+    else:
+        # Opcional: Retornar erro ou apenas sucesso se o usuário já estiver deslogado
+        return JsonResponse({
+            'success': True, 
+            'message': 'Usuário já estava deslogado.'
+        }, status=200)
+
+
+
+def home(request):
+    users = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
+    applications = Application.objects.all() 
+    context = {
+        
+    }
+    
+    return render(request, "home.html", context)
 
 def settings(request):
     context = {}

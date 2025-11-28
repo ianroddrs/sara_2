@@ -5,9 +5,14 @@ class App {
         this.alertContainer = document.getElementById('messages')
 
         this.formularioLogin = document.getElementById('login-form')
-
-        this.formularioLogin.addEventListener('submit', async (event) => {this.login(event)})
+        this.logoutButton = document.getElementById('logoutBtn')
         
+        this.formularioLogin.addEventListener('submit', async (event) => {this.login(event)})
+
+        if(this.logoutButton){
+            this.logoutButton.addEventListener('click', async(event)=> {this.logout(event)})
+        }
+
         window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
     }
 
@@ -75,7 +80,7 @@ class App {
     }
 
 
-async login(event){
+    async login(event){
         event.preventDefault();
         const urlParams = new URLSearchParams(window.location.search);
         const formulario = new FormData(this.formularioLogin);
@@ -84,24 +89,19 @@ async login(event){
             formulario.append('next', urlParams.get('next'))
         }
 
-        try {
-            // Armazena a resposta da requisição
-            const response = await this.request('/api/login/', 'POST', formulario);
-            
-            // Se chegou aqui, deu sucesso (status 200)
-            // Exibe mensagem de sucesso (opcional, pois vai redirecionar rápido)
-            this.showAlert(response.message, 'success');
-
-            // Redireciona o usuário para a página correta
-            if (response.redirect_url) {
-                window.location.href = response.redirect_url;
-            }
-        } catch (error) {
-            // O catch já é tratado dentro do this.request, 
-            // mas como this.request engole o erro e mostra o alert, 
-            // aqui só precisamos garantir que o fluxo segue.
-            console.error("Falha no login", error);
+        const response = await this.request('/login', 'POST', formulario);
+        
+        if (response.redirect_url) {
+            window.location.href = response.redirect_url;
         }
+        this.showAlert(response.message, 'success');
+    }
+
+    async logout(event){
+        event.preventDefault();
+        const response = await this.request('/logout', 'POST');
+        location.reload();
+        this.showAlert(response.message, 'success');
     }
 }
 
