@@ -12,6 +12,7 @@ from django.contrib.auth.models import Group
 from .models import Application
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
+from django.contrib import messages
 import json
 from .forms import (
     CustomUserCreationForm,

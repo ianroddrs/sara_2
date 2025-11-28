@@ -5,23 +5,27 @@
 <div class="modal fade" id="profile-modal" tabindex="-1" aria-labelledby="profileModalLabel" aria-hidden="true">
     <div class="modal-dialog modal-dialog-centered">
         <div class="modal-content shadow border-0">
-            
-            <form method="POST" action="" enctype="multipart/form-data">
-                {% csrf_token %}
-                
-                <div class="modal-header border-0 pb-0 pt-3 px-3 bg-white rounded-top"></div>
 
-                <div class="modal-body p-3 pt-0">
-                    
+            <ul class="nav nav-tabs d-none" id="hiddenTabNav" role="tablist">
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link active" id="tab-btn-info" data-bs-toggle="tab" data-bs-target="#profile-info" type="button" role="tab"></button>
+                </li>
+                <li class="nav-item" role="presentation">
+                    <button class="nav-link" id="tab-btn-password" data-bs-toggle="tab" data-bs-target="#change-password" type="button" role="tab"></button>
+                </li>
+            </ul>
+
+            <div class="tab-content" id="profile-tabs-content">
+                <div class="modal-body p-3 pt-3">
                     <div class="d-flex flex-wrap align-items-center mb-4 mt-2 gap-3">
                         <div class="position-relative">
                             <img id="header-avatar"
-                                 src="{{ user.profile_picture.url }}" 
-                                 alt="{{ user.username }}" 
-                                 class="rounded-circle border" 
-                                 style="width: 64px; height: 64px; object-fit: cover;">
+                            src="{{ user.profile_picture.url }}" 
+                            alt="{{ user.username }}" 
+                            class="rounded-circle border" 
+                            style="width: 64px; height: 64px; object-fit: cover;">
                             {% if user|is_online %}
-                                <span class="position-absolute bottom-0 status-online border border-3 border-white rounded-circle" style="right: 6px; padding: 6px;"></span>
+                            <span class="position-absolute bottom-0 status-online border border-3 border-white rounded-circle" style="right: 6px; padding: 6px;"></span>
                             {% endif %}
                         </div>
                         
@@ -29,9 +33,16 @@
                             <h5 class="mb-1 fw-bold text-dark">{{ user.get_full_name|default:user.username }}</h5>
                             <p class="text-muted mb-0 small">{{ user.email|default:"email@naoinformado.com" }}</p>
                         </div>
-
+                        
                         <div class="d-flex gap-2 ms-auto">
-                            <button type="button" class="btn btn-sm btn-outline-light border text-dark">
+                            <button type="button" 
+                                    class="btn btn-sm btn-link text-decoration-none text-dark fw-bold px-0" 
+                                    onclick="document.getElementById('tab-btn-info').click()">
+                                <i class="bi bi-arrow-left me-1"></i> Voltar
+                            </button>
+                            <button type="button" 
+                            class="btn btn-sm btn-outline-light border text-dark" 
+                                onclick="document.getElementById('tab-btn-password').click()">
                                 Alterar senha
                             </button>
                             <a href="{% url 'base:self_profile_update' %}" class="btn btn-sm btn-outline-light border text-dark">
@@ -39,87 +50,128 @@
                             </a>
                         </div>
                     </div>
-
+                                
                     <hr class="text-muted opacity-25 mb-3">
-
-                    <div class="d-flex flex-column gap-3">
-
-                        <div class="row align-items-center g-2">
-                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">Nome</label>
-                            <div class="col-sm-9">
-                                <div class="row g-2">
-                                    <div class="col-6">
-                                        <input type="text" name="first_name" class="form-control form-control-sm text-dark" value="{{ user.first_name }}" placeholder="Nome">
-                                    </div>
-                                    <div class="col-6">
-                                        <input type="text" name="last_name" class="form-control form-control-sm text-dark" value="{{ user.last_name }}" placeholder="Sobrenome">
+                                
+                    <div class="tab-pane fade show active" id="profile-info" role="tabpanel" aria-labelledby="profile-info-tab" tabindex="0">
+                        <form enctype="multipart/form-data">
+                                <div class="d-flex flex-column gap-3">
+                                    
+                                    <div class="row align-items-center g-2">
+                                        <label class="col-sm-3 col-form-label fw-semibold text-secondary small">Nome</label>
+                                        <div class="col-sm-9">
+                                        <div class="row g-2">
+                                            <div class="col-6">
+                                                <input type="text" name="first_name" class="form-control form-control-sm text-dark" value="{{ user.first_name }}" placeholder="Nome">
+                                            </div>
+                                            <div class="col-6">
+                                                <input type="text" name="last_name" class="form-control form-control-sm text-dark" value="{{ user.last_name }}" placeholder="Sobrenome">
+                                            </div>
+                                        </div>
                                     </div>
                                 </div>
-                            </div>
-                        </div>
-
-                        <div class="row align-items-center g-2">
-                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">Email</label>
-                            <div class="col-sm-9">
-                                <div class="input-group input-group-sm">
-                                    <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
-                                    <input type="email" name="email" class="form-control border-start-0 ps-0" value="{{ user.email }}">
+        
+                                <div class="row align-items-center g-2">
+                                    <label class="col-sm-3 col-form-label fw-semibold text-secondary small">Email</label>
+                                    <div class="col-sm-9">
+                                        <div class="input-group input-group-sm">
+                                            <span class="input-group-text bg-white border-end-0 text-muted"><i class="bi bi-envelope"></i></span>
+                                            <input type="email" name="email" class="form-control border-start-0 ps-0" value="{{ user.email }}">
+                                        </div>
+                                    </div>
                                 </div>
-                            </div>
-                        </div>
 
-                        <div class="row align-items-center g-2">
-                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">IP Acesso</label>
-                            <div class="col-sm-9">
-                                <input type="text" disabled class="form-control form-control-sm" value="{{ user.allowed_ip_address|default:'' }}" placeholder="Qualquer IP">
-                            </div>
-                        </div>
+                                
+                                <div class="row align-items-center g-2">
+                                    <label class="col-sm-3 col-form-label fw-semibold text-secondary small">IP Acesso</label>
+                                    <div class="col-sm-9">
+                                        <input type="text" disabled class="form-control form-control-sm" value="{{ user.allowed_ip_address|default:'' }}" placeholder="Qualquer IP">
+                                    </div>
+                                </div>
+                                
+                                {% for field in user_change_form %}
+                                {% if field.name != 'profile_picture' %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback d-block">{{ error }}</div>
+                                    {% endfor %}
+                                {% endif %}
+                                {% endfor %}
 
-                        <hr class="text-muted opacity-25 mb-3">
-
-                        <div class="row align-items-start g-2">
-                            <label class="col-sm-3 col-form-label fw-semibold text-secondary small">
-                                Foto
-                            </label>
-                            <div class="col-sm-9">
-
-                                <div class="d-flex align-items-start">
-                                    <img id="input-avatar" 
-                                            src="{{ user.profile_picture.url }}" 
-                                            class="rounded-circle border-4 border" 
-                                            width="65" height="65" 
-                                            style="object-fit: cover;">
-
-                                    <label for="avatar-upload" class="btn btn-sm ms-3 mt-1 btn-outline-light border text-dark rounded-3 position-relative">
-                                        Alterar Foto
+                                <hr class="text-muted opacity-25 mb-3">
+        
+                                <div class="row align-items-start g-2">
+                                    <label class="col-sm-3 col-form-label fw-semibold text-secondary small">
+                                        Foto
                                     </label>
-                                    <input type="file" 
-                                            name="profile_picture" 
-                                            id="avatar-upload"
-                                            class="d-none" 
-                                            accept="image/*"> 
+                                    <div class="col-sm-9">
+        
+                                        <div class="d-flex align-items-start">
+                                            <img id="input-avatar" 
+                                                    src="{{ user.profile_picture.url }}" 
+                                                    class="rounded-circle border-4 border" 
+                                                    width="65" height="65" 
+                                                    style="object-fit: cover;">
+        
+                                            <label for="avatar-upload" class="btn btn-sm ms-3 mt-1 btn-outline-light border text-dark rounded-3 position-relative">
+                                                Alterar Foto
+                                            </label>
+                                            <div class="d-none">{{ user_change_form.profile_picture }}</div>
+                                            {% for error in user_change_form.profile_picture.errors %}
+                                                <div class="text-danger mt-2"><small>{{ error }}</small></div>
+                                            {% endfor %}
+                                        </div>
+                    
+                                    </div>
                                 </div>
-             
+        
                             </div>
+                            
+                        </form>
+                    </div>
+        
+                        <div class="modal-footer border-top p-3 bg-light rounded-bottom text-end">
+                            <button type="button" class="btn btn-white border text-dark bg-white fw-semibold btn-sm px-3" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-dark fw-semibold btn-sm px-3">Salvar</button>
+                        </div>
+        
+                </div>
+                <div class="tab-pane fade" id="change-password" role="tabpanel" aria-labelledby="change-password-tab" tabindex="0">
+                    <form method="post"> 
+                        <div class="modal-header border-bottom-0 pb-0">
+                            
+                            <button type="button" 
+                                    class="btn btn-sm btn-link text-decoration-none text-dark fw-bold px-0" 
+                                    onclick="document.getElementById('tab-btn-info').click()">
+                                <i class="bi bi-arrow-left me-1"></i> Voltar
+                            </button>
+
+                            <h6 class="modal-title ms-3 fw-bold">Alterar Senha</h6>
                         </div>
 
-                    </div>
-
+                        <div class="modal-body p-4">
+                            {% for field in password_change_form %}
+                                <div class="mb-3">
+                                    <label for="{{ field.id_for_label }}" class="form-label">{{ field.label }}</label>
+                                    {{ field }}
+                                    {% if field.help_text %}
+                                        <div class="form-text text-muted">{{ field.help_text }}</div>
+                                    {% endif %}
+                                    {% for error in field.errors %}
+                                        <div class="invalid-feedback d-block">
+                                            {{ error }}
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            {% endfor %}
+                        </div>
+                         <div class="modal-footer border-top p-3 bg-light rounded-bottom text-end">
+                            <button type="button" class="btn btn-white border text-dark bg-white fw-semibold btn-sm px-3" data-bs-dismiss="modal">Cancelar</button>
+                            <button type="submit" class="btn btn-dark fw-semibold btn-sm px-3">Salvar Senha</button>
+                        </div>
+                    </form>
                 </div>
+            </div>
 
-                <div class="modal-footer justify-content-between border-top p-3 bg-light rounded-bottom">
-                    {% if user|is_manageable_by:request.user and request.user != user %}
-                        <a href="{% url 'base:user_delete' user.pk %}" class="btn btn-outline-danger border-0 btn-sm fw-semibold px-0"><i class="bi bi-trash me-1"></i>Excluir</a>
-                    {% else %}
-                        <div></div>
-                    {% endif %}
-                    <div class="d-flex gap-2">
-                        <button type="button" class="btn btn-white border text-dark bg-white fw-semibold btn-sm px-3" data-bs-dismiss="modal">Cancelar</button>
-                        <button type="submit" class="btn btn-dark fw-semibold btn-sm px-3">Salvar</button>
-                    </div>
-                </div>
-
-            </form>
         </div>
     </div>
 </div>
@@ -134,10 +186,6 @@
                 // Atualiza a imagem pequena ao lado do input
                 const inputAvatar = document.getElementById('input-avatar');
                 if (inputAvatar) inputAvatar.src = e.target.result;
-                
-                // Atualiza a imagem grande no cabeçalho do modal
-                const headerAvatar = document.getElementById('header-avatar');
-                if (headerAvatar) headerAvatar.src = e.target.result;
             }
             
             reader.readAsDataURL(file);

@@ -14,7 +14,7 @@
                 
                 <h2 class="fs-5 fw-bold mb-4 text-center">Acessar sua conta</h2>
 
-                <form method="post" action="{% url 'base:login' %}" id="login-form">
+                <form id="login-form">
                     {% csrf_token %}
 
                     {% if form.errors %}
