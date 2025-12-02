@@ -53,8 +53,6 @@ def login_view(request):
         }, status=200)
 
     else:
-        # Retorna erro 401 (Unauthorized) com mensagem genérica ou específica
-        # Você pode pegar form.errors para ser mais específico se quiser
         return JsonResponse(
             {"message": "Acesso negado. Usuário ou senha incorreto."}, 
             status=401
@@ -65,16 +63,8 @@ def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
         return JsonResponse({
-            'success': True, 
             'message': 'Logout realizado com sucesso.'
         }, status=200)
-    else:
-        # Opcional: Retornar erro ou apenas sucesso se o usuário já estiver deslogado
-        return JsonResponse({
-            'success': True, 
-            'message': 'Usuário já estava deslogado.'
-        }, status=200)
-
 
 
 def home(request):
@@ -84,18 +74,33 @@ def home(request):
         
     }
     
-    return render(request, "home.html", context)
+    return render(request, "base/home.html", context)
 
 def settings(request):
     context = {}
     return render(request, 'base/settings.html', context)
 
+@login_required
+def self_profile_update_view(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Seu perfil foi atualizado com sucesso!')
+            return redirect('base:user_profile', username=request.user.username)
+    else:
+        form = CustomUserChangeForm(instance=request.user)
+    
+    return render(request, 'settings/profile_form.html', {'form': form})
 
-@secure_module_access
-def user_profile(request, username):
-    usuario = get_object_or_404(CustomUser, username=username)
-    context={'profile_user':usuario}
-    return render(request, 'user_profile.html', context)
+@login_required
+def self_password_update_view(request):
+    if request.method == 'POST':
+        form = CustomUserChangeForm(request.POST, instance=request.user)
+        if form.is_valid():
+            form.save()
+            messages.success(request, 'Sua senha foi alterada com sucesso!')
+            return redirect('base:user_profile', username=request.user.username)
 
 # --- Mixins de Permissão Hierárquica ---
 class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
@@ -201,28 +206,6 @@ class UserProfileView(LoginRequiredMixin, DetailView):
         context['user_module_ids'] = user_module_ids
         
         return context
-
-@login_required
-def self_profile_update_view(request):
-    if request.method == 'POST':
-        form = CustomUserChangeForm(request.POST, request.FILES, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Seu perfil foi atualizado com sucesso!')
-            return redirect('base:user_profile', username=request.user.username)
-    else:
-        form = CustomUserChangeForm(instance=request.user)
-    
-    return render(request, 'settings/profile_form.html', {'form': form})
-
-class CustomPasswordChangeView(LoginRequiredMixin, PasswordChangeView):
-    form_class = CustomPasswordChangeForm
-    template_name = 'settings/password_change_form.html'
-    success_url = reverse_lazy('base:home')
-
-    def form_valid(self, form):
-        messages.success(self.request, "Sua senha foi alterada com sucesso!")
-        return super().form_valid(form)
 
 # --- Views de Gerenciamento de Acesso às Aplicações ---
 @login_required

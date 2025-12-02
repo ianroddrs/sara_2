@@ -4,11 +4,12 @@ class App {
         this.loadingContainer = document.getElementById('loading')
         this.alertContainer = document.getElementById('messages')
 
+        this.modalLogin = new bootstrap.Modal(document.querySelector('#login-modal'))
         this.formularioLogin = document.getElementById('login-form')
         this.logoutButton = document.getElementById('logoutBtn')
+
         
         this.formularioLogin.addEventListener('submit', async (event) => {this.login(event)})
-
         if(this.logoutButton){
             this.logoutButton.addEventListener('click', async(event)=> {this.logout(event)})
         }
@@ -88,6 +89,8 @@ class App {
         if(urlParams.has('next')){ 
             formulario.append('next', urlParams.get('next'))
         }
+
+        this.modalLogin.hide()
 
         const response = await this.request('/login', 'POST', formulario);
         

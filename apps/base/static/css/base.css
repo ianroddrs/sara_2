@@ -1,7 +1,11 @@
 :root {
     /* Paleta de cores personalizada para o Bootstrap */
-    --bs-primary: #4A90E2;
-    --bs-primary-rgb: 74, 144, 226;
+    --bs-primary: #4a90e2 !important;
+    --bs-primary-rgb: 74, 144, 226 !important;
+
+    --bs-dark: #1a2533 !important;
+    --bs-dark-rgb: 26, 37, 51 !important;
+
     --bs-body-font-family: 'Poppins', sans-serif;
 }
 
@@ -29,7 +33,7 @@ body {
 }
 
 #sidebarMenu{
-    background-color: #1a2533 !important; /* Um azul escuro mais moderno */
+    background-color: var(--bs-dark) !important; /* Um azul escuro mais moderno */
     width: 280px !important;
 }
 
