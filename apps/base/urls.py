@@ -6,12 +6,11 @@ from .views import (
     logout_view,
     home,
     settings,
-    user_profile,
+    self_profile_update_view,
+    self_password_update_view,
     UserManagementView,
     UserListView,
     UserProfileView,
-    self_profile_update_view,
-    CustomPasswordChangeView,
     UserCreateView,
     UserUpdateView,
     manage_user_access_view,
@@ -43,9 +42,9 @@ urlpatterns = [
     path('management/users/delete/<int:pk>/', UserDeleteView.as_view(), name='user_delete'),
     
     # Perfil e Listas Públicas
-    path('<str:username>', user_profile, name='user_profile'),
+    # path('<str:username>', user_profile, name='user_profile'),
     path('profile/edit/', self_profile_update_view, name='self_profile_update'),
-    path('profile/change-password/', CustomPasswordChangeView.as_view(), name='password_change'),
+    path('profile/change-password/', self_password_update_view, name='password_change'),
     
     
 ]

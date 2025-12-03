@@ -87,7 +87,7 @@ def self_profile_update_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Seu perfil foi atualizado com sucesso!')
-            return redirect('base:user_profile', username=request.user.username)
+            return redirect('base:home')
     else:
         form = CustomUserChangeForm(instance=request.user)
     
@@ -100,7 +100,7 @@ def self_password_update_view(request):
         if form.is_valid():
             form.save()
             messages.success(request, 'Sua senha foi alterada com sucesso!')
-            return redirect('base:user_profile', username=request.user.username)
+            return redirect('base:home')
 
 # --- Mixins de Permissão Hierárquica ---
 class ManagerialRoleRequiredMixin(LoginRequiredMixin, UserPassesTestMixin):
