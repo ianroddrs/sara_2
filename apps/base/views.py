@@ -13,6 +13,7 @@ from .models import Application
 from django.http import JsonResponse
 from django.views.decorators.http import require_POST
 from django.contrib import messages
+from django.http import HttpResponse
 import json
 from .forms import (
     CustomUserCreationForm,
@@ -28,35 +29,36 @@ CustomUser = get_user_model()
 
 @require_POST
 def login_view(request):
+    # Passamos request.POST para popular o formulário
     form = AuthenticationForm(request, data=request.POST)
     
     if form.is_valid():
         user = form.get_user()
 
-        # Verificação de IP (Lógica mantida)
+        # Lógica de IP
         if hasattr(user, 'allowed_ip_address') and user.allowed_ip_address:
             x_forwarded_for = request.META.get('HTTP_X_FORWARDED_FOR')
             request_ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
             if user.allowed_ip_address != request_ip:
-                return JsonResponse(
-                    {"message": "Acesso negado. Endereço de IP não autorizado."}, 
-                    status=403
-                )
+                # Adiciona erro ao formulário (non_field_errors)
+                form.add_error(None, "Acesso negado. Endereço de IP não autorizado.")
+                # Retorna o template com o form contendo o erro
+                return render(request, 'base/login.html', {'form': form})
         
         login(request, user)
-        next_url = request.POST.get('next') or reverse('base:home')
         
-        return JsonResponse({
-            "message": "Login realizado com sucesso!", 
-            "redirect_url": next_url
-        }, status=200)
+        # Sucesso: Redirecionamento via HTMX
+        next_url = request.POST.get('next')
+        if next_url:
+            response = HttpResponse()
+            response['HX-Redirect'] = next_url
+            return response
 
     else:
-        return JsonResponse(
-            {"message": "Acesso negado. Usuário ou senha incorreto."}, 
-            status=401
-        )
+        # Falha na validação padrão (ex: senha incorreta)
+        # Retorna o template com os erros gerados pelo AuthenticationForm
+        return render(request, 'base/login.html', {'form': form})
 
 @require_POST
 def logout_view(request):

@@ -4,17 +4,17 @@ class App {
         this.loadingContainer = document.getElementById('loading')
         this.alertContainer = document.getElementById('messages')
 
-        this.modalLogin = new bootstrap.Modal(document.querySelector('#login-modal'))
-        this.formularioLogin = document.getElementById('login-form')
         this.logoutButton = document.getElementById('logoutBtn')
 
-        
-        this.formularioLogin.addEventListener('submit', async (event) => {this.login(event)})
         if(this.logoutButton){
             this.logoutButton.addEventListener('click', async(event)=> {this.logout(event)})
         }
 
         window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
+
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
+        })
     }
 
     async request(url, method = 'GET', data = null) {
@@ -75,30 +75,10 @@ class App {
         this.alertContainer.innerHTML = alertHtml;
     }
 
-
     toggleLoading() {
         this.loadingContainer.classList.toggle('d-none')
     }
 
-
-    async login(event){
-        event.preventDefault();
-        const urlParams = new URLSearchParams(window.location.search);
-        const formulario = new FormData(this.formularioLogin);
-
-        if(urlParams.has('next')){ 
-            formulario.append('next', urlParams.get('next'))
-        }
-
-        this.modalLogin.hide()
-
-        const response = await this.request('/login', 'POST', formulario);
-        
-        if (response.redirect_url) {
-            window.location.href = response.redirect_url;
-        }
-        this.showAlert(response.message, 'success');
-    }
 
     async logout(event){
         event.preventDefault();
