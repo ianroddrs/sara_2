@@ -1,21 +1,37 @@
 class App {
     constructor() {
-        this.csrfToken = document.querySelector("meta[name='csrf-token']").getAttribute('content');
         this.loadingContainer = document.getElementById('loading')
         this.alertContainer = document.getElementById('messages')
 
-        this.logoutButton = document.getElementById('logoutBtn')
-
-        if(this.logoutButton){
-            this.logoutButton.addEventListener('click', async(event)=> {this.logout(event)})
-        }
-
-        window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
-
-        document.body.addEventListener('htmx:configRequest', (event) => {
-            event.detail.headers['X-CSRFToken'] = '{{ csrf_token }}';
-        })
+        this._initListeners()
     }
+    
+    _initListeners(){
+        window.addEventListener('DOMContentLoaded', () => this.toggleLoading())
+        
+        document.body.addEventListener('htmx:configRequest', (event) => {
+            const csrfToken = this.getCookie('csrftoken');
+            if (csrfToken) {
+                event.detail.headers['X-CSRFToken'] = csrfToken;
+            }
+        });
+    }
+
+    getCookie(name) {
+        let cookieValue = null;
+        if (document.cookie && document.cookie !== '') {
+            const cookies = document.cookie.split(';');
+            for (let i = 0; i < cookies.length; i++) {
+                const cookie = cookies[i].trim();
+                if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                    cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                    break;
+                }
+            }
+        }
+        return cookieValue;
+    }
+
 
     async request(url, method = 'GET', data = null) {
         const options = {
@@ -77,14 +93,6 @@ class App {
 
     toggleLoading() {
         this.loadingContainer.classList.toggle('d-none')
-    }
-
-
-    async logout(event){
-        event.preventDefault();
-        const response = await this.request('/logout', 'POST');
-        location.reload();
-        this.showAlert(response.message, 'success');
     }
 }
 

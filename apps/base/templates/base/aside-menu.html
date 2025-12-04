@@ -82,9 +82,12 @@
                 {% if user.is_authenticated %}
                 <ul class="list-unstyled m-0 ms-1 mt-2">
                     <li class="mt-1 user-info rounded-pill">
-                        <a href="#logoutBtn" class="p-2 d-block text-center" id="logoutBtn">
-                            <i class="bi bi-box-arrow-left me-1"></i> Sair
-                        </a>
+                        <form action="{% url 'base:logout' %}" method="post">
+                            {% csrf_token %}
+                            <button type="submit"class="bg-transparent border-0 text-center w-100 py-2">
+                                <i class="bi bi-box-arrow-left me-1"></i> Sair
+                            </button>
+                        </form>
                     </li>
                 </ul>
                 {% endif %}

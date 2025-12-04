@@ -24,12 +24,12 @@ from .forms import (
 )
 from .utils import user_can_manage_other
 from .decorators import secure_module_access
+from django.views.decorators.csrf import ensure_csrf_cookie
 
 CustomUser = get_user_model()
 
 @require_POST
 def login_view(request):
-    # Passamos request.POST para popular o formulário
     form = AuthenticationForm(request, data=request.POST)
     
     if form.is_valid():
@@ -41,33 +41,28 @@ def login_view(request):
             request_ip = x_forwarded_for.split(',')[0] if x_forwarded_for else request.META.get('REMOTE_ADDR')
 
             if user.allowed_ip_address != request_ip:
-                # Adiciona erro ao formulário (non_field_errors)
                 form.add_error(None, "Acesso negado. Endereço de IP não autorizado.")
-                # Retorna o template com o form contendo o erro
                 return render(request, 'base/login.html', {'form': form})
         
         login(request, user)
-        
-        # Sucesso: Redirecionamento via HTMX
+    
         next_url = request.POST.get('next')
+        response = HttpResponse()
+        
         if next_url:
-            response = HttpResponse()
             response['HX-Redirect'] = next_url
             return response
-
+            
+        return render(request, 'base/login.html', {'form': form})
     else:
-        # Falha na validação padrão (ex: senha incorreta)
-        # Retorna o template com os erros gerados pelo AuthenticationForm
         return render(request, 'base/login.html', {'form': form})
 
 @require_POST
 def logout_view(request):
     if request.user.is_authenticated:
         logout(request)
-        return JsonResponse({
-            'message': 'Logout realizado com sucesso.'
-        }, status=200)
-
+        messages.success(request, 'Logout realizado com sucesso')
+        return redirect('base:home')
 
 def home(request):
     users = CustomUser.objects.filter(is_active=True).prefetch_related('groups')
